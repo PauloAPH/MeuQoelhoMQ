@@ -15,8 +15,7 @@
 
 import json
 
-import route_guide_pb2
-
+from protos import route_guide_pb2
 
 def read_route_guide_database():
     """Reads the route guide database.
