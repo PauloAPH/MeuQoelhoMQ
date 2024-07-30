@@ -49,6 +49,9 @@ def guide_get_feature(stub):
     )
     guide_get_one_feature(stub, route_guide_pb2.Point(latitude=0, longitude=0))
 
+def create_channel_request(stub):
+    channel = route_guide_pb2.Channel(name="Canal1", tipo=1)
+    print(stub.CreateChannel(channel))
 
 def guide_list_features(stub):
     rectangle = route_guide_pb2.Rectangle(
@@ -108,14 +111,7 @@ def run():
     # of the code.
     with grpc.insecure_channel("localhost:50051") as channel:
         stub = route_guide_pb2_grpc.RouteGuideStub(channel)
-        print("-------------- GetFeature --------------")
-        guide_get_feature(stub)
-        print("-------------- ListFeatures --------------")
-        guide_list_features(stub)
-        print("-------------- RecordRoute --------------")
-        guide_record_route(stub)
-        print("-------------- RouteChat --------------")
-        guide_route_chat(stub)
+        create_channel_request(stub)
 
 
 if __name__ == "__main__":

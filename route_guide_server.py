@@ -68,6 +68,15 @@ class RouteGuideServicer(route_guide_pb2_grpc.RouteGuideServicer):
             return route_guide_pb2.Feature(name="", location=request)
         else:
             return feature
+        
+    def CreateChannel(self, request, context):
+        match request.tipo:
+            case 0:
+                print("Request recebida criando uma fila simples")
+            case 1:
+                print("Request recebida criando uma fila multipla")
+        return request
+
 
     def ListFeatures(self, request, context):
         left = min(request.lo.longitude, request.hi.longitude)

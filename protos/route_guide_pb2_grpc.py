@@ -60,6 +60,11 @@ class RouteGuideStub(object):
                 request_serializer=protos_dot_route__guide__pb2.RouteNote.SerializeToString,
                 response_deserializer=protos_dot_route__guide__pb2.RouteNote.FromString,
                 _registered_method=True)
+        self.CreateChannel = channel.unary_unary(
+                '/routeguide.RouteGuide/CreateChannel',
+                request_serializer=protos_dot_route__guide__pb2.Channel.SerializeToString,
+                response_deserializer=protos_dot_route__guide__pb2.Channel.FromString,
+                _registered_method=True)
 
 
 class RouteGuideServicer(object):
@@ -110,6 +115,18 @@ class RouteGuideServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def CreateChannel(self, request, context):
+        """A simple RPC.
+
+        Obtains the feature at a given position.
+
+        A feature with an empty name is returned if there's no feature at the given
+        position.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_RouteGuideServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -132,6 +149,11 @@ def add_RouteGuideServicer_to_server(servicer, server):
                     servicer.RouteChat,
                     request_deserializer=protos_dot_route__guide__pb2.RouteNote.FromString,
                     response_serializer=protos_dot_route__guide__pb2.RouteNote.SerializeToString,
+            ),
+            'CreateChannel': grpc.unary_unary_rpc_method_handler(
+                    servicer.CreateChannel,
+                    request_deserializer=protos_dot_route__guide__pb2.Channel.FromString,
+                    response_serializer=protos_dot_route__guide__pb2.Channel.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -243,6 +265,33 @@ class RouteGuide(object):
             '/routeguide.RouteGuide/RouteChat',
             protos_dot_route__guide__pb2.RouteNote.SerializeToString,
             protos_dot_route__guide__pb2.RouteNote.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def CreateChannel(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/routeguide.RouteGuide/CreateChannel',
+            protos_dot_route__guide__pb2.Channel.SerializeToString,
+            protos_dot_route__guide__pb2.Channel.FromString,
             options,
             channel_credentials,
             insecure,
