@@ -21,21 +21,24 @@ import time
 import grpc
 from protos import meu_coelho_mq_pb2
 from protos import meu_coelho_mq_pb2_grpc
-import resources
+import resources as RS
 
 
 class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
     """Provides methods that implement functionality of MeuCoelhoMQS server."""
 
     def __init__(self):
-        self.db = resources.read_route_guide_database()
+        print("Start")
         
     def CreateChannel(self, request, context):
         match request.tipo:
             case 0:
                 response = "Request recebida criando uma fila simples"
+                RS.insert_channel(request.name, request.tipo)
             case 1:
                 response = "Request recebida criando uma fila multipla"
+                RS.insert_channel(request.name, request.tipo)
+
         print(response)        
         return meu_coelho_mq_pb2.Response(response = response)
     

@@ -30,7 +30,7 @@ def create_channel_request(stub):
 
 
 def delete_channel_request(stub):
-    channel = meu_coelho_mq_pb2.Channel(name="Canal1", tipo =1)
+    channel = meu_coelho_mq_pb2.Channel(name="Canal1", tipo = 1)
     print(stub.DeleteChannel(channel))
 
 def run():

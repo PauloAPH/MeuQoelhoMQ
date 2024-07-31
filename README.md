@@ -5,7 +5,36 @@
 
 ### Comandos
 #### Comando para instalar gRPC tools
-- pip install grpcio-tools
+ ```
+ pip install grpcio-tools 
+ ```
+#### Comando para instalar psycopg2
+ ```
+ pip install psycopg2
+  ```
 #### Comando para gerar arquivos do protocol buffer: 
-- python3 -m grpc_tools.protoc -I. --python_out=.  --grpc_python_out=. protos/meu_coelho_mq.proto
+ ```
+ python3 -m grpc_tools.protoc -I. --python_out=.  --grpc_python_out=. protos/meu_coelho_mq.proto
+  ```
 
+#### Comandos PostgreSQL
+- Iniciar PostgreSQL
+ ```
+ sudo systemctl start postgresql
+ ```
+- Entrar no PostgreSQL
+ ```
+psql -h localhost -U postgres
+ ```
+- Listar databases (dentro do terminal psql)
+```
+\l
+ ```
+-Entrar no database 
+ ```
+\c meu_coelho_mq_database
+ ```
+- Estrutura do database
+```
+ \dt
+ ```
