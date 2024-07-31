@@ -24,10 +24,10 @@ package routeguide;
 // Interface exported by the server.
 service MeuCoelhoMQ {
   // Create a channel
-  rpc CreateChannel(Channel) returns (Channel) {}
+  rpc CreateChannel(Channel) returns (Response) {}
 
   //Delete a channel
-  rpc DeleteChannel(Channel) returns (Channel) {}
+  rpc DeleteChannel(Channel) returns (Response) {}
 
   //List all channels avaliable
   rpc ListChannels (Channel) returns (stream Channel) {}
@@ -48,3 +48,6 @@ message Channel {
 }
 
 
+message Response {
+  string response = 1;
+}

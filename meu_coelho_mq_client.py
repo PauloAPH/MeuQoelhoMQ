@@ -29,7 +29,9 @@ def create_channel_request(stub):
     print(stub.CreateChannel(channel))
 
 
-
+def delete_channel_request(stub):
+    channel = meu_coelho_mq_pb2.Channel(name="Canal1", tipo =1)
+    print(stub.DeleteChannel(channel))
 
 def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
@@ -38,6 +40,7 @@ def run():
     with grpc.insecure_channel("localhost:50051") as channel:
         stub = meu_coelho_mq_pb2_grpc.MeuCoelhoMQStub(channel)
         create_channel_request(stub)
+        delete_channel_request(stub)
 
 
 if __name__ == "__main__":

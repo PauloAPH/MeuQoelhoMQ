@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""The Python implementation of the gRPC route guide server."""
+"""The Python implementation of the gRPC MeuCoelhoMQS server."""
 
 from concurrent import futures
 import logging
@@ -25,7 +25,7 @@ import resources
 
 
 class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
-    """Provides methods that implement functionality of route guide server."""
+    """Provides methods that implement functionality of MeuCoelhoMQS server."""
 
     def __init__(self):
         self.db = resources.read_route_guide_database()
@@ -33,10 +33,16 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
     def CreateChannel(self, request, context):
         match request.tipo:
             case 0:
-                print("Request recebida criando uma fila simples")
+                response = "Request recebida criando uma fila simples"
             case 1:
-                print("Request recebida criando uma fila multipla")
-        return request
+                response = "Request recebida criando uma fila multipla"
+        print(response)        
+        return meu_coelho_mq_pb2.Response(response = response)
+    
+    def DeleteChannel(self, request, context):
+        response = "Fila " + request.name + " deletada"
+        print(response)
+        return meu_coelho_mq_pb2.Response(response = response)
 
 
 

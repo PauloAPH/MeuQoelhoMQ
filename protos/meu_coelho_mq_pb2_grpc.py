@@ -43,12 +43,12 @@ class MeuCoelhoMQStub(object):
         self.CreateChannel = channel.unary_unary(
                 '/routeguide.MeuCoelhoMQ/CreateChannel',
                 request_serializer=protos_dot_meu__coelho__mq__pb2.Channel.SerializeToString,
-                response_deserializer=protos_dot_meu__coelho__mq__pb2.Channel.FromString,
+                response_deserializer=protos_dot_meu__coelho__mq__pb2.Response.FromString,
                 _registered_method=True)
         self.DeleteChannel = channel.unary_unary(
                 '/routeguide.MeuCoelhoMQ/DeleteChannel',
                 request_serializer=protos_dot_meu__coelho__mq__pb2.Channel.SerializeToString,
-                response_deserializer=protos_dot_meu__coelho__mq__pb2.Channel.FromString,
+                response_deserializer=protos_dot_meu__coelho__mq__pb2.Response.FromString,
                 _registered_method=True)
         self.ListChannels = channel.unary_stream(
                 '/routeguide.MeuCoelhoMQ/ListChannels',
@@ -88,12 +88,12 @@ def add_MeuCoelhoMQServicer_to_server(servicer, server):
             'CreateChannel': grpc.unary_unary_rpc_method_handler(
                     servicer.CreateChannel,
                     request_deserializer=protos_dot_meu__coelho__mq__pb2.Channel.FromString,
-                    response_serializer=protos_dot_meu__coelho__mq__pb2.Channel.SerializeToString,
+                    response_serializer=protos_dot_meu__coelho__mq__pb2.Response.SerializeToString,
             ),
             'DeleteChannel': grpc.unary_unary_rpc_method_handler(
                     servicer.DeleteChannel,
                     request_deserializer=protos_dot_meu__coelho__mq__pb2.Channel.FromString,
-                    response_serializer=protos_dot_meu__coelho__mq__pb2.Channel.SerializeToString,
+                    response_serializer=protos_dot_meu__coelho__mq__pb2.Response.SerializeToString,
             ),
             'ListChannels': grpc.unary_stream_rpc_method_handler(
                     servicer.ListChannels,
@@ -128,7 +128,7 @@ class MeuCoelhoMQ(object):
             target,
             '/routeguide.MeuCoelhoMQ/CreateChannel',
             protos_dot_meu__coelho__mq__pb2.Channel.SerializeToString,
-            protos_dot_meu__coelho__mq__pb2.Channel.FromString,
+            protos_dot_meu__coelho__mq__pb2.Response.FromString,
             options,
             channel_credentials,
             insecure,
@@ -155,7 +155,7 @@ class MeuCoelhoMQ(object):
             target,
             '/routeguide.MeuCoelhoMQ/DeleteChannel',
             protos_dot_meu__coelho__mq__pb2.Channel.SerializeToString,
-            protos_dot_meu__coelho__mq__pb2.Channel.FromString,
+            protos_dot_meu__coelho__mq__pb2.Response.FromString,
             options,
             channel_credentials,
             insecure,
