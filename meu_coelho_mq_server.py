@@ -43,7 +43,8 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
         return meu_coelho_mq_pb2.Response(response = response)
     
     def DeleteChannel(self, request, context):
-        response = "Fila " + request.name + " deletada"
+        RS.delete_channel(request.name)
+        response = "Fila " + request.name + "deletada"
         print(response)
         return meu_coelho_mq_pb2.Response(response = response)
 

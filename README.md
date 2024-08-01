@@ -10,7 +10,7 @@
  ```
 #### Comando para instalar psycopg2
  ```
- pip install psycopg2
+ pip install psycopg2-binary
   ```
 #### Comando para gerar arquivos do protocol buffer: 
  ```
