@@ -30,7 +30,7 @@ service MeuCoelhoMQ {
   rpc DeleteChannel(Channel) returns (Response) {}
 
   //List all channels avaliable
-  rpc ListChannels (Channel) returns (stream Channel) {}
+  rpc ListChannels(Response) returns (stream Channel) {}
 
 }
 

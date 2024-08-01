@@ -52,7 +52,7 @@ class MeuCoelhoMQStub(object):
                 _registered_method=True)
         self.ListChannels = channel.unary_stream(
                 '/routeguide.MeuCoelhoMQ/ListChannels',
-                request_serializer=protos_dot_meu__coelho__mq__pb2.Channel.SerializeToString,
+                request_serializer=protos_dot_meu__coelho__mq__pb2.Response.SerializeToString,
                 response_deserializer=protos_dot_meu__coelho__mq__pb2.Channel.FromString,
                 _registered_method=True)
 
@@ -97,7 +97,7 @@ def add_MeuCoelhoMQServicer_to_server(servicer, server):
             ),
             'ListChannels': grpc.unary_stream_rpc_method_handler(
                     servicer.ListChannels,
-                    request_deserializer=protos_dot_meu__coelho__mq__pb2.Channel.FromString,
+                    request_deserializer=protos_dot_meu__coelho__mq__pb2.Response.FromString,
                     response_serializer=protos_dot_meu__coelho__mq__pb2.Channel.SerializeToString,
             ),
     }
@@ -181,7 +181,7 @@ class MeuCoelhoMQ(object):
             request,
             target,
             '/routeguide.MeuCoelhoMQ/ListChannels',
-            protos_dot_meu__coelho__mq__pb2.Channel.SerializeToString,
+            protos_dot_meu__coelho__mq__pb2.Response.SerializeToString,
             protos_dot_meu__coelho__mq__pb2.Channel.FromString,
             options,
             channel_credentials,

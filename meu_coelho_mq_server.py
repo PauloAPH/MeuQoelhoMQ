@@ -45,10 +45,14 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
     def DeleteChannel(self, request, context):
         RS.delete_channel(request.name)
         response = "Fila " + request.name + "deletada"
-        print(response)
         return meu_coelho_mq_pb2.Response(response = response)
 
-
+    def ListChannels(self, request, context):
+        channels = RS.list_channels()
+        print(channels)
+        for channel in channels:
+            response = meu_coelho_mq_pb2.Channel(name = channel[1], tipo = int(channel[2]))
+            yield response
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

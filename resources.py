@@ -36,7 +36,6 @@ def insert_channel(name, type):
             release_connection(conn)
 
 def delete_channel(name):
-    print(name)
     try:
         # Get a connection from the pool
         conn = get_connection()
@@ -50,4 +49,22 @@ def delete_channel(name):
     finally:
         if conn:
             release_connection(conn)
+
+def list_channels():
+    try:
+        # Get a connection from the pool
+        conn = get_connection()
+        with conn.cursor() as cur:
+            query = '''SELECT * FROM channel;'''
+            cur.execute(query)
+            channels = cur.fetchall()
+            return channels
+
+    except psycopg2.DatabaseError as error:
+        print(f"Error: {error}")
+
+    finally:
+        if conn:
+            release_connection(conn)
+
 

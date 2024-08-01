@@ -14,7 +14,8 @@ def create_tables():
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         type VARCHAR(100) NOT NULL,
-        auto_insert_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+        auto_insert_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (name)
     );
     '''
 
