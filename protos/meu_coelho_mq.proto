@@ -32,6 +32,9 @@ service MeuCoelhoMQ {
   //List all channels avaliable
   rpc ListChannels(Response) returns (stream Channel) {}
 
+  //Publich a message in a channel
+  rpc PublishMessage(Message) returns (Response) {}
+
 }
 
 
@@ -45,6 +48,11 @@ message Channel {
   string name = 1;
   Tipo tipo = 2;
   int32 qtd_msg = 3;
+}
+
+message Message {
+  string data = 1;
+  string channel = 2;
 }
 
 

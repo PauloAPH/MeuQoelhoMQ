@@ -39,6 +39,12 @@ def list_channels(stub):
     for canal in channels:
         print("Canal: " + canal.name, "Tipo:" )
 
+def publish_message(stub):
+    msg = meu_coelho_mq_pb2.Message(data = "OláMundo", channel = "Canal1")
+    res = stub.PublishMessage(msg)
+
+
+
 
 def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
@@ -49,6 +55,9 @@ def run():
         #create_channel_request(stub)
         #delete_channel_request(stub)
         list_channels(stub)
+        publish_message(stub)
+
+
 
 
 if __name__ == "__main__":

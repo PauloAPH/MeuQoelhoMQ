@@ -54,6 +54,12 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
             response = meu_coelho_mq_pb2.Channel(name = channel[1], tipo = int(channel[2]))
             yield response
 
+    def PublishMessage(self, request, context):
+        response = "Mensagem Publicada na fila" + request.channel
+        RS.insert_message(request.data, request.channel)
+        print(response)        
+        return meu_coelho_mq_pb2.Response(response = response)
+
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     meu_coelho_mq_pb2_grpc.add_MeuCoelhoMQServicer_to_server(

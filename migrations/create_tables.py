@@ -34,10 +34,10 @@ def create_tables():
     CREATE TABLE IF NOT EXISTS message (
         id SERIAL PRIMARY KEY,
         message TEXT NOT NULL,
-        channel_id INT,
+        channel TEXT NOT NULL,
         CONSTRAINT fk_channel
-            FOREIGN KEY (channel_id)
-            REFERENCES channel(id)
+            FOREIGN KEY (channel)
+            REFERENCES channel(name)
             ON DELETE CASCADE
     );
     '''

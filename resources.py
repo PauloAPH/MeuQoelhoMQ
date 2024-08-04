@@ -17,6 +17,24 @@ def get_connection():
 def release_connection(conn):
     connection_pool.putconn(conn)
 
+def insert_message(data, channel):
+    try:
+        # Get a connection from the pool
+        conn = get_connection()
+        with conn.cursor() as cur:
+            query = '''
+            INSERT INTO message (message, channel) 
+            VALUES (%s, %s);
+            '''
+            cur.execute(query, (data, channel))
+            conn.commit()
+    except psycopg2.DatabaseError as error:
+        print(f"Error: {error}")
+
+    finally:
+        if conn:
+            release_connection(conn)
+
 def insert_channel(name, type):
     try:
         # Get a connection from the pool
