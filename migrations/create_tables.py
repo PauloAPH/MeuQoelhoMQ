@@ -49,6 +49,7 @@ def create_tables():
         id SERIAL PRIMARY KEY,
         message TEXT NOT NULL,
         channel TEXT NOT NULL,
+        subscribers TEXT[] NOT NULL,
         CONSTRAINT fk_channel
             FOREIGN KEY (channel)
             REFERENCES channel(name)

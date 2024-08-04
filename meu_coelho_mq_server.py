@@ -38,6 +38,12 @@ def hash_value(value):
     # Get the hexadecimal representation of the hash
     return hash_object.hexdigest()
 
+def login(credential):
+    user = credential.id
+    user_password = hash_value(credential.password)
+    password_hash = RS.consult_credentials(user) 
+    return user_password == password_hash
+
 
 class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
     """Provides methods that implement functionality of MeuCoelhoMQS server."""
@@ -79,37 +85,48 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
 
     def PublishMessage(self, request, context):
         response = "Mensagem Publicada na fila" + request.channel
-        RS.insert_message(request.data, request.channel)
+        subs = RS.list_subscribers_to_channels(request.channel)
+        subs = [t[0] for t in subs]
+        print(subs)
+        RS.insert_message(request.data, request.channel, subs)
         print(response)        
         return meu_coelho_mq_pb2.Response(response = response)
     
     def SubscribeToChannel(self, request, context):
-        user = request.credentials.id
-        user_password = hash_value(request.credentials.password)
-        password_hash = RS.consult_credentials(user) 
-        
-        print(user_password)
-        print(password_hash)
-        if password_hash == user_password:
+        if login(request.credentials):
             channel_type = RS.consult_channel_type(request.channel)
             subs = RS.consult_subscribers(request.channel)
 
             if channel_type == "SIMPLES" and subs > 0:
                 response = "Acess denied, channel already being taken"
             else: 
-                RS.insert_subscribers(user , request.channel)
+                RS.insert_subscribers(request.credentials.id , request.channel)
                 response = "Inscrito na fila " + request.channel
         else:
             response = "Acess denied, wrong credentials"
-        print(response)
-
-        
         return meu_coelho_mq_pb2.Response(response = response)
     
     def ConsultNumberOfMessages(self, request, context):
-        number_of_messages = RS.consult_message_to_subscriber(request.channel)
-        print(number_of_messages)
-        return meu_coelho_mq_pb2.Response(response = str(number_of_messages) )
+        if login(request.credentials):
+            number_of_messages = RS.consult_number_of_message_in_channel(request.channel)
+            print(number_of_messages)
+            return meu_coelho_mq_pb2.Response(response = str(number_of_messages) )
+        else:
+            response = "Acess denied, wrong credentials"
+        return meu_coelho_mq_pb2.Response(response = response)
+    
+    def GetMessageFromChannel(self, request, context):
+        if login(request.credentials):
+            messages = RS.list_message_in_channels()
+            for msg in messages:
+                subs = RS.consult_subscribers_to_message()
+                #atualiza vetor
+                #remove user da lista de subs da msg
+                RS.update_message_subscribers()
+                #retorna a mensagem
+        else:
+            response = "Acess denied, wrong credentials"
+        return meu_coelho_mq_pb2.Response(response = response)
 
 
 

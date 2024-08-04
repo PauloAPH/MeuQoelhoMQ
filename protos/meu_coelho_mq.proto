@@ -44,6 +44,9 @@ service MeuCoelhoMQ {
   //Consult the number of messages in a channel that the client is subscribed
   rpc ConsultNumberOfMessages(Subscriber) returns (Response) {}
 
+  //Stream all messages from a channel
+  rpc GetMessageFromChannel(Subscriber) returns (stream Response) {}
+
 }
 
 enum Tipo{
