@@ -23,6 +23,10 @@ from protos import meu_coelho_mq_pb2
 from protos import meu_coelho_mq_pb2_grpc
 import resources
 
+def create_user(stub):
+    user = meu_coelho_mq_pb2.Credentials(id = "Paulo", password = "123456")
+    res = stub.Register(user)
+    print(res)
 
 def create_channel_request(stub):
     channel = meu_coelho_mq_pb2.Channel()
@@ -46,7 +50,8 @@ def publish_message(stub):
     res = stub.PublishMessage(msg)
 
 def subscribe_to_channel(stub):
-    subs = meu_coelho_mq_pb2.Subscriber(subscriber = 1, channel = "Canal1")
+    cred = meu_coelho_mq_pb2.Credentials(id = "Paulo", password = "123456")
+    subs = meu_coelho_mq_pb2.Subscriber(credentials = cred, channel = "Canal2")
     res = stub.SubscribeToChannel(subs)
     print(res)
 
@@ -65,8 +70,9 @@ def run():
         #delete_channel_request(stub)
         #list_channels(stub)
         #publish_message(stub)
-        #subscribe_to_channel(stub)
-        consult_messages_in_channel(stub)
+        subscribe_to_channel(stub)
+        #consult_messages_in_channel(stub)
+        #create_user(stub)
 
 
 

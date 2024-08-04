@@ -15,13 +15,28 @@
 
 from concurrent import futures
 import logging
+import hashlib
 import math
 import time
 
 import grpc
 from protos import meu_coelho_mq_pb2
 from protos import meu_coelho_mq_pb2_grpc
-import resources as RS
+import resources as RS 
+
+
+def hash_value(value):
+    if not isinstance(value, bytes):
+        value = str(value).encode('utf-8')
+    
+    # Create a hashlib object
+    hash_object = hashlib.sha256()
+    
+    # Update the hash object with the value
+    hash_object.update(value)
+    
+    # Get the hexadecimal representation of the hash
+    return hash_object.hexdigest()
 
 
 class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
@@ -29,7 +44,13 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
 
     def __init__(self):
         print("Start")
-        
+
+    def Register(self, request, context):
+        password_hash = hash_value(request.password)
+        RS.create_user(request.id, password_hash)
+        response = "Usuario criado com sucesso"
+        return meu_coelho_mq_pb2.Response(response = response)
+
     def CreateChannel(self, request, context):
         match request.tipo:
             case 0:
@@ -63,17 +84,26 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
         return meu_coelho_mq_pb2.Response(response = response)
     
     def SubscribeToChannel(self, request, context):
-        channel_type = RS.consult_channel_type(request.channel)
-        subs = RS.consult_subscribers(request.channel)
-        print(channel_type)
-        print(type(channel_type))
-        print(subs)
-        if channel_type == "SIMPLES" and subs > 1:
-            response = "Acess denied, channel already being taken"
-        else: 
-            RS.insert_subscribers(request.subscriber, request.channel)
-            response = "Inscrito na fila " + request.channel
+        user = request.credentials.id
+        user_password = hash_value(request.credentials.password)
+        password_hash = RS.consult_credentials(user) 
+        
+        print(user_password)
+        print(password_hash)
+        if password_hash == user_password:
+            channel_type = RS.consult_channel_type(request.channel)
+            subs = RS.consult_subscribers(request.channel)
+
+            if channel_type == "SIMPLES" and subs > 0:
+                response = "Acess denied, channel already being taken"
+            else: 
+                RS.insert_subscribers(user , request.channel)
+                response = "Inscrito na fila " + request.channel
+        else:
+            response = "Acess denied, wrong credentials"
         print(response)
+
+        
         return meu_coelho_mq_pb2.Response(response = response)
     
     def ConsultNumberOfMessages(self, request, context):

@@ -35,6 +35,9 @@ service MeuCoelhoMQ {
   //Publich a message in a channel
   rpc PublishMessage(Message) returns (Response) {}
 
+  //Register to the service
+  rpc Register(Credentials) returns (Response) {}
+
   //Subscribe to a channel
   rpc SubscribeToChannel(Subscriber) returns (Response) {}
 
@@ -48,16 +51,19 @@ enum Tipo{
   MULTIPLO = 1;
 }
 
-message Subscriber {
-  int64 subscriber = 1;
-  string channel = 2;
+message Credentials {
+  string id = 1;
+  string password = 2;
 }
 
+message Subscriber {
+  Credentials credentials = 1;
+  string channel = 2;
+}
 
 message Channel {
   string name = 1;
   Tipo tipo = 2;
-  int32 qtd_msg = 3;
 }
 
 message Message {

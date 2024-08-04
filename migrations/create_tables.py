@@ -19,15 +19,27 @@ def create_tables():
     );
     '''
 
+    create_users_table = '''
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        password_hash TEXT NOT NULL,
+        UNIQUE (user_id)
+    );
+    '''
+
     create_subscribers_table = '''
     CREATE TABLE IF NOT EXISTS subscribers (
         id SERIAL PRIMARY KEY,
-        subscriber TEXT NOT NULL,
-        channel TEXT NOT NULL,
-        UNIQUE (subscriber),
+        user_id TEXT NOT NULL,
+        channel_id TEXT NOT NULL,
         CONSTRAINT fk_channel
-            FOREIGN KEY (channel)
+            FOREIGN KEY (channel_id)
             REFERENCES channel(name)
+            ON DELETE CASCADE,
+        CONSTRAINT fk_user
+            FOREIGN KEY (user_id)
+            REFERENCES users(user_id)
             ON DELETE CASCADE
     );
     '''
@@ -56,6 +68,7 @@ def create_tables():
             with conn.cursor() as cur:
                 # Execute the SQL commands
                 cur.execute(create_channel_table)
+                cur.execute(create_users_table)
                 cur.execute(create_subscribers_table)
                 cur.execute(create_message_table)
 

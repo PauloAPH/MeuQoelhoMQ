@@ -60,6 +60,11 @@ class MeuCoelhoMQStub(object):
                 request_serializer=protos_dot_meu__coelho__mq__pb2.Message.SerializeToString,
                 response_deserializer=protos_dot_meu__coelho__mq__pb2.Response.FromString,
                 _registered_method=True)
+        self.Register = channel.unary_unary(
+                '/routeguide.MeuCoelhoMQ/Register',
+                request_serializer=protos_dot_meu__coelho__mq__pb2.Credentials.SerializeToString,
+                response_deserializer=protos_dot_meu__coelho__mq__pb2.Response.FromString,
+                _registered_method=True)
         self.SubscribeToChannel = channel.unary_unary(
                 '/routeguide.MeuCoelhoMQ/SubscribeToChannel',
                 request_serializer=protos_dot_meu__coelho__mq__pb2.Subscriber.SerializeToString,
@@ -104,6 +109,13 @@ class MeuCoelhoMQServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Register(self, request, context):
+        """Register to the service
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def SubscribeToChannel(self, request, context):
         """Subscribe to a channel
         """
@@ -139,6 +151,11 @@ def add_MeuCoelhoMQServicer_to_server(servicer, server):
             'PublishMessage': grpc.unary_unary_rpc_method_handler(
                     servicer.PublishMessage,
                     request_deserializer=protos_dot_meu__coelho__mq__pb2.Message.FromString,
+                    response_serializer=protos_dot_meu__coelho__mq__pb2.Response.SerializeToString,
+            ),
+            'Register': grpc.unary_unary_rpc_method_handler(
+                    servicer.Register,
+                    request_deserializer=protos_dot_meu__coelho__mq__pb2.Credentials.FromString,
                     response_serializer=protos_dot_meu__coelho__mq__pb2.Response.SerializeToString,
             ),
             'SubscribeToChannel': grpc.unary_unary_rpc_method_handler(
@@ -260,6 +277,33 @@ class MeuCoelhoMQ(object):
             target,
             '/routeguide.MeuCoelhoMQ/PublishMessage',
             protos_dot_meu__coelho__mq__pb2.Message.SerializeToString,
+            protos_dot_meu__coelho__mq__pb2.Response.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Register(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/routeguide.MeuCoelhoMQ/Register',
+            protos_dot_meu__coelho__mq__pb2.Credentials.SerializeToString,
             protos_dot_meu__coelho__mq__pb2.Response.FromString,
             options,
             channel_credentials,

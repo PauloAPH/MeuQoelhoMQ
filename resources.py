@@ -49,16 +49,16 @@ def insert_channel(name, type):
     except psycopg2.DatabaseError as error:
         print(f"Error: {error}")
 
-def insert_subscribers(subscriber, channel):
+def insert_subscribers(user_id, channel):
     try:
         # Get a connection from the pool
         conn = get_connection()
         with conn.cursor() as cur:
             query = '''
-            INSERT INTO subscribers (subscriber, channel) 
+            INSERT INTO subscribers (user_id, channel_id) 
             VALUES (%s, %s);
             '''
-            cur.execute(query, (subscriber, channel))
+            cur.execute(query, (user_id, channel))
             conn.commit()
     except psycopg2.DatabaseError as error:
         print(f"Error: {error}")
@@ -102,6 +102,7 @@ def consult_message_to_subscriber(channel):
         if conn:
             release_connection(conn)
 
+
 def consult_subscribers(channel):
     try:
         # Get a connection from the pool
@@ -109,7 +110,7 @@ def consult_subscribers(channel):
         with conn.cursor() as cur:
             query = '''SELECT COUNT(*) 
             FROM channel 
-            JOIN subscribers ON subscribers.channel = channel.name 
+            JOIN subscribers ON subscribers.channel_id = channel.name 
             WHERE channel.name = %s;'''
             cur.execute(query, [channel])
             subs = cur.fetchone()
@@ -155,5 +156,39 @@ def list_channels():
     finally:
         if conn:
             release_connection(conn)
+
+def create_user(user_id, password_hash):
+    try:
+        # Get a connection from the pool
+        conn = get_connection()
+        with conn.cursor() as cur:
+            query = '''    
+            INSERT INTO users (user_id, password_hash) 
+            VALUES (%s, %s);
+            '''
+            cur.execute(query, (user_id, password_hash))
+            conn.commit()
+    except psycopg2.DatabaseError as error:
+        print(f"Error: {error}")
+
+    finally:
+        if conn:
+            release_connection(conn)
+
+def consult_credentials(user_i):
+    try:
+        # Get a connection from the pool
+        conn = get_connection()
+        with conn.cursor() as cur:
+            query = '''SELECT password_hash FROM users WHERE user_id = %s;'''
+            cur.execute(query, [user_i])
+            password_hash = cur.fetchone()
+            return password_hash[0]
+    except psycopg2.DatabaseError as error:
+        print(f"Error: {error}")
+    finally:
+        if conn:
+            release_connection(conn)
+
 
 
