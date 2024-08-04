@@ -22,10 +22,12 @@ def create_tables():
     create_subscribers_table = '''
     CREATE TABLE IF NOT EXISTS subscribers (
         id SERIAL PRIMARY KEY,
-        channel_id INT,
+        subscriber TEXT NOT NULL,
+        channel TEXT NOT NULL,
+        UNIQUE (subscriber),
         CONSTRAINT fk_channel
-            FOREIGN KEY (channel_id)
-            REFERENCES channel(id)
+            FOREIGN KEY (channel)
+            REFERENCES channel(name)
             ON DELETE CASCADE
     );
     '''

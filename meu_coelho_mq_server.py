@@ -34,10 +34,12 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
         match request.tipo:
             case 0:
                 response = "Request recebida criando uma fila simples"
-                RS.insert_channel(request.name, request.tipo)
+                tipo = meu_coelho_mq_pb2.Tipo.Name(request.tipo)
+                RS.insert_channel(request.name, tipo)
             case 1:
                 response = "Request recebida criando uma fila multipla"
-                RS.insert_channel(request.name, request.tipo)
+                tipo = meu_coelho_mq_pb2.Tipo.Name(request.tipo)
+                RS.insert_channel(request.name, tipo)
 
         print(response)        
         return meu_coelho_mq_pb2.Response(response = response)
@@ -51,7 +53,7 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
         channels = RS.list_channels()
         print(channels)
         for channel in channels:
-            response = meu_coelho_mq_pb2.Channel(name = channel[1], tipo = int(channel[2]))
+            response = meu_coelho_mq_pb2.Channel(name = channel[1], tipo = channel[2])
             yield response
 
     def PublishMessage(self, request, context):
@@ -59,6 +61,23 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
         RS.insert_message(request.data, request.channel)
         print(response)        
         return meu_coelho_mq_pb2.Response(response = response)
+    
+    def SubscribeToChannel(self, request, context):
+        channel_type = RS.consult_channel_type(request.channel)
+        subs = RS.consult_subscribers(request.channel)
+        print(channel_type)
+        print(type(channel_type))
+        print(subs)
+        if channel_type == "SIMPLES" and subs > 1:
+            response = "Acess denied, channel already being taken"
+        else: 
+            RS.insert_subscribers(request.subscriber, request.channel)
+            response = "Inscrito na fila " + request.channel
+        print(response)
+        return meu_coelho_mq_pb2.Response(response = response)
+
+
+
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

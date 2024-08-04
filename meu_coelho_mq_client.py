@@ -25,7 +25,9 @@ import resources
 
 
 def create_channel_request(stub):
-    channel = meu_coelho_mq_pb2.Channel(name = "Canal2", tipo=0)
+    channel = meu_coelho_mq_pb2.Channel()
+    channel.name = "Canal1"
+    channel.tipo = meu_coelho_mq_pb2.Tipo.MULTIPLO
     print(stub.CreateChannel(channel))
 
 
@@ -43,6 +45,12 @@ def publish_message(stub):
     msg = meu_coelho_mq_pb2.Message(data = "OláMundo", channel = "Canal1")
     res = stub.PublishMessage(msg)
 
+def subscribe_to_channel(stub):
+    subs = meu_coelho_mq_pb2.Subscriber(subscriber = 1, channel = "Canal1")
+    res = stub.SubscribeToChannel(subs)
+    print(res)
+
+
 
 
 
@@ -56,6 +64,7 @@ def run():
         #delete_channel_request(stub)
         list_channels(stub)
         publish_message(stub)
+        subscribe_to_channel(stub)
 
 
 

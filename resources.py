@@ -49,6 +49,20 @@ def insert_channel(name, type):
     except psycopg2.DatabaseError as error:
         print(f"Error: {error}")
 
+def insert_subscribers(subscriber, channel):
+    try:
+        # Get a connection from the pool
+        conn = get_connection()
+        with conn.cursor() as cur:
+            query = '''
+            INSERT INTO subscribers (subscriber, channel) 
+            VALUES (%s, %s);
+            '''
+            cur.execute(query, (subscriber, channel))
+            conn.commit()
+    except psycopg2.DatabaseError as error:
+        print(f"Error: {error}")
+
     finally:
         if conn:
             release_connection(conn)
@@ -61,6 +75,43 @@ def delete_channel(name):
             query = ''' DELETE FROM channel WHERE name = %s;'''
             cur.execute(query, [name])
             conn.commit()
+    except psycopg2.DatabaseError as error:
+        print(f"Error: {error}")
+
+    finally:
+        if conn:
+            release_connection(conn)
+
+def consult_subscribers(channel):
+    try:
+        # Get a connection from the pool
+        conn = get_connection()
+        with conn.cursor() as cur:
+            query = '''SELECT COUNT(*) 
+            FROM channel 
+            JOIN subscribers ON subscribers.channel = channel.name 
+            WHERE channel.name = %s;'''
+            cur.execute(query, [channel])
+            subs = cur.fetchone()
+            return subs[0]
+
+    except psycopg2.DatabaseError as error:
+        print(f"Error: {error}")
+
+    finally:
+        if conn:
+            release_connection(conn)
+
+def consult_channel_type(channel):
+    try:
+        # Get a connection from the pool
+        conn = get_connection()
+        with conn.cursor() as cur:
+            query = '''SELECT type FROM channel WHERE name = %s;'''
+            cur.execute(query, [channel])
+            type = cur.fetchone()
+            return type[0]
+
     except psycopg2.DatabaseError as error:
         print(f"Error: {error}")
 

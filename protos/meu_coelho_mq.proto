@@ -35,12 +35,19 @@ service MeuCoelhoMQ {
   //Publich a message in a channel
   rpc PublishMessage(Message) returns (Response) {}
 
+  //Subscribe to a channel
+  rpc SubscribeToChannel(Subscriber) returns (Response) {}
+
 }
 
-
 enum Tipo{
-  Simples = 0;
-  Multiplo = 1;
+  SIMPLES = 0;
+  MULTIPLO = 1;
+}
+
+message Subscriber {
+  int64 subscriber = 1;
+  string channel = 2;
 }
 
 

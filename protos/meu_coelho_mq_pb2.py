@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1aprotos/meu_coelho_mq.proto\x12\nrouteguide\"H\n\x07\x43hannel\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x1e\n\x04tipo\x18\x02 \x01(\x0e\x32\x10.routeguide.Tipo\x12\x0f\n\x07qtd_msg\x18\x03 \x01(\x05\"(\n\x07Message\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\t\x12\x0f\n\x07\x63hannel\x18\x02 \x01(\t\"\x1c\n\x08Response\x12\x10\n\x08response\x18\x01 \x01(\t*!\n\x04Tipo\x12\x0b\n\x07Simples\x10\x00\x12\x0c\n\x08Multiplo\x10\x01\x32\x87\x02\n\x0bMeuCoelhoMQ\x12<\n\rCreateChannel\x12\x13.routeguide.Channel\x1a\x14.routeguide.Response\"\x00\x12<\n\rDeleteChannel\x12\x13.routeguide.Channel\x1a\x14.routeguide.Response\"\x00\x12=\n\x0cListChannels\x12\x14.routeguide.Response\x1a\x13.routeguide.Channel\"\x00\x30\x01\x12=\n\x0ePublishMessage\x12\x13.routeguide.Message\x1a\x14.routeguide.Response\"\x00\x42\x36\n\x1bio.grpc.examples.routeguideB\x0fRouteGuideProtoP\x01\xa2\x02\x03RTGb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1aprotos/meu_coelho_mq.proto\x12\nrouteguide\"1\n\nSubscriber\x12\x12\n\nsubscriber\x18\x01 \x01(\x03\x12\x0f\n\x07\x63hannel\x18\x02 \x01(\t\"H\n\x07\x43hannel\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x1e\n\x04tipo\x18\x02 \x01(\x0e\x32\x10.routeguide.Tipo\x12\x0f\n\x07qtd_msg\x18\x03 \x01(\x05\"(\n\x07Message\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\t\x12\x0f\n\x07\x63hannel\x18\x02 \x01(\t\"\x1c\n\x08Response\x12\x10\n\x08response\x18\x01 \x01(\t*!\n\x04Tipo\x12\x0b\n\x07SIMPLES\x10\x00\x12\x0c\n\x08MULTIPLO\x10\x01\x32\xcd\x02\n\x0bMeuCoelhoMQ\x12<\n\rCreateChannel\x12\x13.routeguide.Channel\x1a\x14.routeguide.Response\"\x00\x12<\n\rDeleteChannel\x12\x13.routeguide.Channel\x1a\x14.routeguide.Response\"\x00\x12=\n\x0cListChannels\x12\x14.routeguide.Response\x1a\x13.routeguide.Channel\"\x00\x30\x01\x12=\n\x0ePublishMessage\x12\x13.routeguide.Message\x1a\x14.routeguide.Response\"\x00\x12\x44\n\x12SubscribeToChannel\x12\x16.routeguide.Subscriber\x1a\x14.routeguide.Response\"\x00\x42\x36\n\x1bio.grpc.examples.routeguideB\x0fRouteGuideProtoP\x01\xa2\x02\x03RTGb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -22,14 +22,16 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'protos.meu_coelho_mq_pb2', 
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\033io.grpc.examples.routeguideB\017RouteGuideProtoP\001\242\002\003RTG'
-  _globals['_TIPO']._serialized_start=188
-  _globals['_TIPO']._serialized_end=221
-  _globals['_CHANNEL']._serialized_start=42
-  _globals['_CHANNEL']._serialized_end=114
-  _globals['_MESSAGE']._serialized_start=116
-  _globals['_MESSAGE']._serialized_end=156
-  _globals['_RESPONSE']._serialized_start=158
-  _globals['_RESPONSE']._serialized_end=186
-  _globals['_MEUCOELHOMQ']._serialized_start=224
-  _globals['_MEUCOELHOMQ']._serialized_end=487
+  _globals['_TIPO']._serialized_start=239
+  _globals['_TIPO']._serialized_end=272
+  _globals['_SUBSCRIBER']._serialized_start=42
+  _globals['_SUBSCRIBER']._serialized_end=91
+  _globals['_CHANNEL']._serialized_start=93
+  _globals['_CHANNEL']._serialized_end=165
+  _globals['_MESSAGE']._serialized_start=167
+  _globals['_MESSAGE']._serialized_end=207
+  _globals['_RESPONSE']._serialized_start=209
+  _globals['_RESPONSE']._serialized_end=237
+  _globals['_MEUCOELHOMQ']._serialized_start=275
+  _globals['_MEUCOELHOMQ']._serialized_end=608
 # @@protoc_insertion_point(module_scope)
