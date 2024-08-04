@@ -82,6 +82,26 @@ def delete_channel(name):
         if conn:
             release_connection(conn)
 
+def consult_message_to_subscriber(channel):
+    try:
+        # Get a connection from the pool
+        conn = get_connection()
+        with conn.cursor() as cur:
+            query = '''SELECT COUNT(*) 
+            FROM channel 
+            JOIN message ON message.channel = channel.name
+            WHERE channel.name = %s;'''
+            cur.execute(query, (channel,))
+            subs = cur.fetchone()
+            return subs[0]
+
+    except psycopg2.DatabaseError as error:
+        print(f"Error: {error}")
+
+    finally:
+        if conn:
+            release_connection(conn)
+
 def consult_subscribers(channel):
     try:
         # Get a connection from the pool

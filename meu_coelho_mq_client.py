@@ -50,9 +50,10 @@ def subscribe_to_channel(stub):
     res = stub.SubscribeToChannel(subs)
     print(res)
 
-
-
-
+def consult_messages_in_channel(stub):
+    sub = meu_coelho_mq_pb2.Subscriber(subscriber = 1, channel = "Canal1")
+    qtd = stub.ConsultNumberOfMessages(sub)
+    print(qtd)
 
 def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
@@ -62,9 +63,11 @@ def run():
         stub = meu_coelho_mq_pb2_grpc.MeuCoelhoMQStub(channel)
         #create_channel_request(stub)
         #delete_channel_request(stub)
-        list_channels(stub)
-        publish_message(stub)
-        subscribe_to_channel(stub)
+        #list_channels(stub)
+        #publish_message(stub)
+        #subscribe_to_channel(stub)
+        consult_messages_in_channel(stub)
+
 
 
 

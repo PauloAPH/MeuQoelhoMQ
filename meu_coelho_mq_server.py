@@ -75,6 +75,11 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
             response = "Inscrito na fila " + request.channel
         print(response)
         return meu_coelho_mq_pb2.Response(response = response)
+    
+    def ConsultNumberOfMessages(self, request, context):
+        number_of_messages = RS.consult_message_to_subscriber(request.channel)
+        print(number_of_messages)
+        return meu_coelho_mq_pb2.Response(response = str(number_of_messages) )
 
 
 
