@@ -13,10 +13,14 @@
  pip install psycopg2-binary
   ```
 #### Comando para gerar arquivos do protocol buffer: 
- ```
- python3 -m grpc_tools.protoc -I. --python_out=.  --grpc_python_out=. protos/meu_coelho_mq.proto
-  ```
-
+#### Python
+```
+  python3 -m grpc_tools.protoc -I. --python_out=.  --grpc_python_out=. protos/meu_coelho_mq.proto
+```
+#### Java
+```
+  protoc -I=. --java_out=. protos/meu_coelho_mq.proto
+```
 #### Comandos PostgreSQL
 - Iniciar PostgreSQL
  ```
@@ -35,6 +39,4 @@ psql -h localhost -U postgres
 \c meu_coelho_mq_database
  ```
 - Estrutura do database
-```
- \dt
- ```
+` \dt `

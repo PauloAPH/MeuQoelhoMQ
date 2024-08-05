@@ -15,8 +15,8 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "io.grpc.examples.routeguide";
-option java_outer_classname = "RouteGuideProto";
+option java_package = "MeuCoelhoMQProto";
+option java_outer_classname = "MeuCoelhoMQProto";
 option objc_class_prefix = "RTG";
 
 package routeguide;
