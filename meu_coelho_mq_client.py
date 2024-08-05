@@ -63,6 +63,13 @@ def consult_messages_in_channel(stub):
     qtd = stub.ConsultNumberOfMessages(sub)
     print(qtd)
 
+def get_messages_from_subscrition(stub):
+    cred = meu_coelho_mq_pb2.Credentials(id = "Paulo", password = "123456")
+    sub = meu_coelho_mq_pb2.Subscriber(credentials = cred, channel = "Canal1")
+    res = stub.GetMessageFromChannel(sub)
+    for r in res:
+        print(r)
+
 def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs
@@ -71,15 +78,12 @@ def run():
         stub = meu_coelho_mq_pb2_grpc.MeuCoelhoMQStub(channel)
         #create_channel_request(stub)
         #delete_channel_request(stub)
-        #list_channels(stub)
+        list_channels(stub)
         publish_message(stub)
-       #subscribe_to_channel(stub)
+        #subscribe_to_channel(stub)
         #consult_messages_in_channel(stub)
         #create_user(stub)
-
-
-
-
+        get_messages_from_subscrition(stub)
 
 
 if __name__ == "__main__":

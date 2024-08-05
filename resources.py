@@ -100,6 +100,21 @@ def delete_channel(name):
         if conn:
             release_connection(conn)
 
+def delete_message(message_id):
+    try:
+        # Get a connection from the pool
+        conn = get_connection()
+        with conn.cursor() as cur:
+            query = ''' DELETE FROM message WHERE id = %s;'''
+            cur.execute(query, [message_id])
+            conn.commit()
+    except psycopg2.DatabaseError as error:
+        print(f"Error: {error}")
+
+    finally:
+        if conn:
+            release_connection(conn)
+
 def update_message_subscribers(message_id, subscribers):
     try:
         # Get a connection from the pool
@@ -111,24 +126,6 @@ def update_message_subscribers(message_id, subscribers):
             WHERE id = %s
             ;'''
             cur.execute(query, (subscribers, message_id))
-            subs = cur.fetchone()
-            return subs[0]
-    except psycopg2.DatabaseError as error:
-        print(f"Error: {error}")
-
-    finally:
-        if conn:
-            release_connection(conn)
-
-def consult_subscribers_to_message(message_id):
-    try:
-        # Get a connection from the pool
-        conn = get_connection()
-        with conn.cursor() as cur:
-            query = '''SELECT subscribers
-            FROM message
-            WHERE id = %s;'''
-            cur.execute(query, (message_id,))
             subs = cur.fetchone()
             return subs[0]
     except psycopg2.DatabaseError as error:
@@ -252,14 +249,14 @@ def list_message_in_channel(channel):
         conn = get_connection()
         with conn.cursor() as cur:
             query = '''SELECT * 
-            FROM channel 
-            JOIN message ON message.channel = channel.name
-            WHERE channel.name = %s;'''
+            FROM message
+            WHERE channel = %s;'''
             cur.execute(query, (channel,))
             subs = cur.fetchall()
-            return subs[0]
+            return subs
     except psycopg2.DatabaseError as error:
         print(f"Error: {error}")
     finally:
         if conn:
             release_connection(conn)
+

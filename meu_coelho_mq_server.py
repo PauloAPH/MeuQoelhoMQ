@@ -24,18 +24,12 @@ from protos import meu_coelho_mq_pb2
 from protos import meu_coelho_mq_pb2_grpc
 import resources as RS 
 
-
+#Credito ChatGPT
 def hash_value(value):
     if not isinstance(value, bytes):
         value = str(value).encode('utf-8')
-    
-    # Create a hashlib object
     hash_object = hashlib.sha256()
-    
-    # Update the hash object with the value
     hash_object.update(value)
-    
-    # Get the hexadecimal representation of the hash
     return hash_object.hexdigest()
 
 def login(credential):
@@ -49,7 +43,7 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
     """Provides methods that implement functionality of MeuCoelhoMQS server."""
 
     def __init__(self):
-        print("Start")
+        print("Server runnig: Hello World!")
 
     def Register(self, request, context):
         password_hash = hash_value(request.password)
@@ -67,8 +61,6 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
                 response = "Request recebida criando uma fila multipla"
                 tipo = meu_coelho_mq_pb2.Tipo.Name(request.tipo)
                 RS.insert_channel(request.name, tipo)
-
-        print(response)        
         return meu_coelho_mq_pb2.Response(response = response)
     
     def DeleteChannel(self, request, context):
@@ -78,7 +70,6 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
 
     def ListChannels(self, request, context):
         channels = RS.list_channels()
-        print(channels)
         for channel in channels:
             response = meu_coelho_mq_pb2.Channel(name = channel[1], tipo = channel[2])
             yield response
@@ -87,9 +78,7 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
         response = "Mensagem Publicada na fila" + request.channel
         subs = RS.list_subscribers_to_channels(request.channel)
         subs = [t[0] for t in subs]
-        print(subs)
         RS.insert_message(request.data, request.channel, subs)
-        print(response)        
         return meu_coelho_mq_pb2.Response(response = response)
     
     def SubscribeToChannel(self, request, context):
@@ -109,7 +98,6 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
     def ConsultNumberOfMessages(self, request, context):
         if login(request.credentials):
             number_of_messages = RS.consult_number_of_message_in_channel(request.channel)
-            print(number_of_messages)
             return meu_coelho_mq_pb2.Response(response = str(number_of_messages) )
         else:
             response = "Acess denied, wrong credentials"
@@ -117,20 +105,23 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
     
     def GetMessageFromChannel(self, request, context):
         if login(request.credentials):
-            messages = RS.list_message_in_channels()
+            messages = RS.list_message_in_channel(request.channel)
             for msg in messages:
-                subs = RS.consult_subscribers_to_message()
-                #atualiza vetor
-                #remove user da lista de subs da msg
-                RS.update_message_subscribers()
-                #retorna a mensagem
+                id = msg[0]
+                res = msg[1]
+                subs = msg[3]
+                if request.credentials.id in subs:
+                    new_subs = subs.remove(request.credentials.id)
+                    if not new_subs:
+                        RS.delete_message(id)
+                    else:
+                        RS.update_message_subscribers(id, new_subs)
+                    yield meu_coelho_mq_pb2.Response(response = res)
         else:
             response = "Acess denied, wrong credentials"
-        return meu_coelho_mq_pb2.Response(response = response)
+            yield meu_coelho_mq_pb2.Response(response = response)
 
-
-
-
+        
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     meu_coelho_mq_pb2_grpc.add_MeuCoelhoMQServicer_to_server(
