@@ -21,9 +21,7 @@ import random
 import grpc
 from protos import meu_coelho_mq_pb2
 from protos import meu_coelho_mq_pb2_grpc
-import resources as RS 
-
-import resources
+import database.resources as RS 
 
 def create_user(stub):
     user = meu_coelho_mq_pb2.Credentials(id = "Paulo", password = "123456")

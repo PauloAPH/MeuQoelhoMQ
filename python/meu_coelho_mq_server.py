@@ -22,7 +22,7 @@ import time
 import grpc
 from protos import meu_coelho_mq_pb2
 from protos import meu_coelho_mq_pb2_grpc
-import resources as RS 
+import database.resources as RS 
 
 #Credito ChatGPT
 def hash_value(value):
