@@ -19,7 +19,7 @@ option java_package = "MeuCoelhoMQProto";
 option java_outer_classname = "MeuCoelhoMQProto";
 option objc_class_prefix = "RTG";
 
-package routeguide;
+package MeuCoelhoMQProto;
 
 // Interface exported by the server.
 service MeuCoelhoMQ {
