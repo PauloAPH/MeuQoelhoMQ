@@ -21,17 +21,54 @@ import random
 import grpc
 from protos import meu_coelho_mq_pb2
 from protos import meu_coelho_mq_pb2_grpc
+import resources as RS 
+
 import resources
 
+def create_user(stub):
+    user = meu_coelho_mq_pb2.Credentials(id = "Paulo", password = "123456")
+    res = stub.Register(user)
+    print(res)
 
 def create_channel_request(stub):
-    channel = meu_coelho_mq_pb2.Channel(name="Canal1", tipo=1)
+    channel = meu_coelho_mq_pb2.Channel()
+    channel.name = "Canal1"
+    channel.tipo = meu_coelho_mq_pb2.Tipo.MULTIPLO
     print(stub.CreateChannel(channel))
 
 
 def delete_channel_request(stub):
-    channel = meu_coelho_mq_pb2.Channel(name="Canal1", tipo =1)
-    print(stub.DeleteChannel(channel))
+    channel = meu_coelho_mq_pb2.Channel(name = "Canal1", tipo = 1)
+    stub.DeleteChannel(channel)
+
+def list_channels(stub):
+    channel = meu_coelho_mq_pb2.Channel(name = "Canal1", tipo = 1)
+    channels = stub.ListChannels(channel)
+    for canal in channels:
+        print("Canal: " + canal.name, "Tipo:" )
+
+def publish_message(stub):
+    msg = meu_coelho_mq_pb2.Message(data = "OláMundo", channel = "Canal1")
+    res = stub.PublishMessage(msg)
+
+def subscribe_to_channel(stub):
+    cred = meu_coelho_mq_pb2.Credentials(id = "Paulo", password = "123456")
+    subs = meu_coelho_mq_pb2.Subscriber(credentials = cred, channel = "Canal2")
+    res = stub.SubscribeToChannel(subs)
+    print(res)
+
+def consult_messages_in_channel(stub):
+    cred = meu_coelho_mq_pb2.Credentials(id = "Paulo", password = "123452")
+    sub = meu_coelho_mq_pb2.Subscriber(credentials = cred, channel = "Canal2")
+    qtd = stub.ConsultNumberOfMessages(sub)
+    print(qtd)
+
+def get_messages_from_subscrition(stub):
+    cred = meu_coelho_mq_pb2.Credentials(id = "Paulo", password = "123456")
+    sub = meu_coelho_mq_pb2.Subscriber(credentials = cred, channel = "Canal1")
+    res = stub.GetMessageFromChannel(sub)
+    for r in res:
+        print(r)
 
 def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
@@ -39,8 +76,14 @@ def run():
     # of the code.
     with grpc.insecure_channel("localhost:50051") as channel:
         stub = meu_coelho_mq_pb2_grpc.MeuCoelhoMQStub(channel)
-        create_channel_request(stub)
-        delete_channel_request(stub)
+        #create_channel_request(stub)
+        #delete_channel_request(stub)
+        list_channels(stub)
+        publish_message(stub)
+        #subscribe_to_channel(stub)
+        #consult_messages_in_channel(stub)
+        #create_user(stub)
+        get_messages_from_subscrition(stub)
 
 
 if __name__ == "__main__":
