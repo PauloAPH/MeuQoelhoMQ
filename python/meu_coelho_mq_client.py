@@ -21,7 +21,7 @@ import random
 import grpc
 from protos import meu_coelho_mq_pb2
 from protos import meu_coelho_mq_pb2_grpc
-import database.resources as RS 
+import resources as RS 
 
 def create_user(stub):
     user = meu_coelho_mq_pb2.Credentials(id = "Paulo", password = "123456")
@@ -46,7 +46,7 @@ def list_channels(stub):
         print("Canal: " + canal.name, "Tipo:" )
 
 def publish_message(stub):
-    msg = meu_coelho_mq_pb2.Message(data = "OláMundo", channel = "Canal1")
+    msg = meu_coelho_mq_pb2.Message(data = "OláMundo123", channel = "Canal1")
     res = stub.PublishMessage(msg)
 
 def subscribe_to_channel(stub):
@@ -56,7 +56,7 @@ def subscribe_to_channel(stub):
     print(res)
 
 def consult_messages_in_channel(stub):
-    cred = meu_coelho_mq_pb2.Credentials(id = "Paulo", password = "123452")
+    cred = meu_coelho_mq_pb2.Credentials(id = "Paulo", password = "123456")
     sub = meu_coelho_mq_pb2.Subscriber(credentials = cred, channel = "Canal2")
     qtd = stub.ConsultNumberOfMessages(sub)
     print(qtd)
@@ -76,7 +76,7 @@ def run():
         stub = meu_coelho_mq_pb2_grpc.MeuCoelhoMQStub(channel)
         #create_channel_request(stub)
         #delete_channel_request(stub)
-        list_channels(stub)
+        #list_channels(stub)
         publish_message(stub)
         #subscribe_to_channel(stub)
         #consult_messages_in_channel(stub)

@@ -15,7 +15,7 @@
 #### Comando para gerar arquivos do protocol buffer: 
 #### Python
 ```
-  python3 -m grpc_tools.protoc -I. --python_out=.  --grpc_python_out=. protos/meu_coelho_mq.proto
+  python3 -m grpc_tools.protoc -I. --python_out=python  --grpc_python_out=python  protos/meu_coelho_mq.proto
 ```
 #### Java
 ```
@@ -39,4 +39,6 @@ psql -h localhost -U postgres
 \c meu_coelho_mq_database
  ```
 - Estrutura do database
-` \dt `
+```
+ \dt 
+```

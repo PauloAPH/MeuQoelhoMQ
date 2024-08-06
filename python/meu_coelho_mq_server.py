@@ -19,10 +19,11 @@ import hashlib
 import math
 import time
 
+
 import grpc
 from protos import meu_coelho_mq_pb2
 from protos import meu_coelho_mq_pb2_grpc
-import database.resources as RS 
+import resources as RS 
 
 #Credito ChatGPT
 def hash_value(value):
