@@ -14,17 +14,19 @@
 """The Python implementation of the gRPC route guide client."""
 
 from __future__ import print_function
+from datetime import datetime, timezone
 
 import logging
 import random
-
+import time
 import grpc
+
 from protos import meu_coelho_mq_pb2
 from protos import meu_coelho_mq_pb2_grpc
 import resources as RS 
 
-def create_user(stub):
-    user = meu_coelho_mq_pb2.Credentials(id = "Paulo", password = "123456")
+def create_user(stub, id, password):
+    user = meu_coelho_mq_pb2.Credentials(id = id, password = password)
     res = stub.Register(user)
     print(res)
 
@@ -40,18 +42,18 @@ def delete_channel_request(stub):
     stub.DeleteChannel(channel)
 
 def list_channels(stub):
-    channel = meu_coelho_mq_pb2.Channel(name = "Canal1", tipo = 1)
-    channels = stub.ListChannels(channel)
-    for canal in channels:
-        print("Canal: " + canal.name, "Tipo:" )
+    channel_out = meu_coelho_mq_pb2.Channel(name = "Canal1", tipo = 1)
+    channels = stub.ListChannels(channel_out)
+    for channel in channels:
+        tipo = meu_coelho_mq_pb2.Tipo.Name(channel.tipo)
+        print(channel.name +  " Tipo: " + tipo)
 
-def publish_message(stub):
-    msg = meu_coelho_mq_pb2.Message(data = "OláMundo123", channel = "Canal1")
+def publish_message(stub, data_in, channel_in):
+    msg = meu_coelho_mq_pb2.Message(data = data_in, channel = channel_in)
     res = stub.PublishMessage(msg)
 
-def subscribe_to_channel(stub):
-    cred = meu_coelho_mq_pb2.Credentials(id = "Paulo", password = "123456")
-    subs = meu_coelho_mq_pb2.Subscriber(credentials = cred, channel = "Canal2")
+def subscribe_to_channel(stub, cred, channel):
+    subs = meu_coelho_mq_pb2.Subscriber(credentials = cred, channel = channel)
     res = stub.SubscribeToChannel(subs)
     print(res)
 
@@ -61,9 +63,7 @@ def consult_messages_in_channel(stub):
     qtd = stub.ConsultNumberOfMessages(sub)
     print(qtd)
 
-def get_messages_from_subscrition(stub):
-    cred = meu_coelho_mq_pb2.Credentials(id = "Paulo", password = "123456")
-    sub = meu_coelho_mq_pb2.Subscriber(credentials = cred, channel = "Canal1")
+def get_messages_from_subscrition(stub, sub):
     res = stub.GetMessageFromChannel(sub)
     for r in res:
         print(r)
@@ -77,11 +77,13 @@ def run():
         #create_channel_request(stub)
         #delete_channel_request(stub)
         #list_channels(stub)
-        publish_message(stub)
+        #publish_message(stub)
         #subscribe_to_channel(stub)
         #consult_messages_in_channel(stub)
         #create_user(stub)
-        get_messages_from_subscrition(stub)
+        #get_messages_from_subscrition(stub)
+
+        
 
 
 if __name__ == "__main__":

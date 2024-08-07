@@ -126,8 +126,7 @@ def update_message_subscribers(message_id, subscribers):
             WHERE id = %s
             ;'''
             cur.execute(query, (subscribers, message_id))
-            subs = cur.fetchone()
-            return subs[0]
+            conn.commit()
     except psycopg2.DatabaseError as error:
         print(f"Error: {error}")
 

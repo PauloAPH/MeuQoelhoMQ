@@ -25,7 +25,7 @@ from protos import meu_coelho_mq_pb2
 from protos import meu_coelho_mq_pb2_grpc
 import resources as RS 
 
-#Credito ChatGPT
+#Credito hash_value ChatGPT
 def hash_value(value):
     if not isinstance(value, bytes):
         value = str(value).encode('utf-8')
@@ -112,11 +112,11 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
                 res = msg[1]
                 subs = msg[3]
                 if request.credentials.id in subs:
-                    new_subs = subs.remove(request.credentials.id)
-                    if not new_subs:
+                    subs.remove(request.credentials.id)
+                    if len(subs) == 0:
                         RS.delete_message(id)
                     else:
-                        RS.update_message_subscribers(id, new_subs)
+                        RS.update_message_subscribers(id, subs)
                     yield meu_coelho_mq_pb2.Response(response = res)
         else:
             response = "Acess denied, wrong credentials"
