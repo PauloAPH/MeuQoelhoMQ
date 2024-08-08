@@ -30,12 +30,14 @@ def create_user(stub, id, password):
     res = stub.Register(user)
     print(res)
 
-def create_channel_request(stub):
+def create_channel_request(stub, name, tipo):
     channel = meu_coelho_mq_pb2.Channel()
-    channel.name = "Canal1"
-    channel.tipo = meu_coelho_mq_pb2.Tipo.MULTIPLO
+    channel.name = name
+    if tipo == "Simples":
+        channel.tipo = meu_coelho_mq_pb2.Tipo.SIMPLES
+    elif tipo == "Multiplo":
+        channel.tipo = meu_coelho_mq_pb2.Tipo.MULTIPLO
     print(stub.CreateChannel(channel))
-
 
 def delete_channel_request(stub):
     channel = meu_coelho_mq_pb2.Channel(name = "Canal1", tipo = 1)

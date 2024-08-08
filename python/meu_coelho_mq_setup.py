@@ -7,7 +7,8 @@ import time
 import grpc
 
 import meu_coelho_mq_client as Client
-
+from database import create_tables
+from database import create_database
 from protos import meu_coelho_mq_pb2
 from protos import meu_coelho_mq_pb2_grpc
 
@@ -16,18 +17,16 @@ def run():
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
     with grpc.insecure_channel("localhost:50051") as channel:
+        create_database.create_database()
+        create_tables.create_tables()
         stub = meu_coelho_mq_pb2_grpc.MeuCoelhoMQStub(channel)
-        id = input("Id: ")
-        password = input("Senha: ")
-        cred = meu_coelho_mq_pb2.Credentials(id = id, password = password)
-        Client.create_user(stub, id, password)
-        Client.subscribe_to_channel(stub, cred, "Canal1")
-        sub = meu_coelho_mq_pb2.Subscriber(credentials = cred, channel = "Canal1")
-
-        while(1):
-            Client.get_messages_from_subscrition(stub, sub)
-            time.sleep(10)
-
+        name = "Canal1"
+        tipo = "Simples"
+        Client.create_channel_request(stub, name, tipo)
+        name = "Canal2"
+        tipo = "Multiplo"
+        Client.create_channel_request(stub, name, tipo)
+        
 
 if __name__ == "__main__":
     logging.basicConfig()

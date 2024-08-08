@@ -53,15 +53,9 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
         return meu_coelho_mq_pb2.Response(response = response)
 
     def CreateChannel(self, request, context):
-        match request.tipo:
-            case 0:
-                response = "Request recebida criando uma fila simples"
-                tipo = meu_coelho_mq_pb2.Tipo.Name(request.tipo)
-                RS.insert_channel(request.name, tipo)
-            case 1:
-                response = "Request recebida criando uma fila multipla"
-                tipo = meu_coelho_mq_pb2.Tipo.Name(request.tipo)
-                RS.insert_channel(request.name, tipo)
+        tipo = meu_coelho_mq_pb2.Tipo.Name(request.tipo)
+        RS.insert_channel(request.name, tipo)
+        response = "Request recebida " + request.name + " do tipo " + tipo
         return meu_coelho_mq_pb2.Response(response = response)
     
     def DeleteChannel(self, request, context):
