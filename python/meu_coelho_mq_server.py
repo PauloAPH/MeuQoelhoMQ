@@ -14,16 +14,14 @@
 """The Python implementation of the gRPC MeuCoelhoMQS server."""
 
 from concurrent import futures
-import logging
-import hashlib
-import math
-import time
-
 
 import grpc
+import hashlib
+import logging
+
+from database import resources as RS 
 from protos import meu_coelho_mq_pb2
 from protos import meu_coelho_mq_pb2_grpc
-import resources as RS 
 
 #Credito hash_value ChatGPT
 def hash_value(value):

@@ -1,10 +1,10 @@
 from __future__ import print_function
 from datetime import datetime, timezone
 
-import logging
-import random
-import time
+
 import grpc
+import logging
+import time
 
 import meu_coelho_mq_client as Client
 

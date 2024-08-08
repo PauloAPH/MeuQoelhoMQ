@@ -2,11 +2,10 @@ from __future__ import print_function
 from datetime import datetime, timezone
 
 import logging
-import random
-import time
 import grpc
 
 import meu_coelho_mq_client as Client
+
 from database import create_tables
 from database import create_database
 from protos import meu_coelho_mq_pb2

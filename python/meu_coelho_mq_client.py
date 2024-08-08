@@ -14,16 +14,14 @@
 """The Python implementation of the gRPC route guide client."""
 
 from __future__ import print_function
+
 from datetime import datetime, timezone
-
-import logging
-import random
-import time
 import grpc
+import logging
 
+from database import resources as RS 
 from protos import meu_coelho_mq_pb2
 from protos import meu_coelho_mq_pb2_grpc
-import resources as RS 
 
 def create_user(stub, id, password):
     user = meu_coelho_mq_pb2.Credentials(id = id, password = password)
@@ -68,7 +66,7 @@ def consult_messages_in_channel(stub):
 def get_messages_from_subscrition(stub, sub):
     res = stub.GetMessageFromChannel(sub)
     for r in res:
-        print(r)
+        print(r.response)
 
 def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
@@ -76,17 +74,6 @@ def run():
     # of the code.
     with grpc.insecure_channel("localhost:50051") as channel:
         stub = meu_coelho_mq_pb2_grpc.MeuCoelhoMQStub(channel)
-        #create_channel_request(stub)
-        #delete_channel_request(stub)
-        #list_channels(stub)
-        #publish_message(stub)
-        #subscribe_to_channel(stub)
-        #consult_messages_in_channel(stub)
-        #create_user(stub)
-        #get_messages_from_subscrition(stub)
-
-        
-
 
 if __name__ == "__main__":
     logging.basicConfig()
