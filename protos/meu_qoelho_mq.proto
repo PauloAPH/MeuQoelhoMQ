@@ -1,0 +1,75 @@
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package MeuQoelhoMQProto;
+
+// Interface exported by the server.
+service MeuQoelhoMQ {
+  // Create a channel
+  rpc CreateChannel(Channels) returns (Response) {}
+
+  //Delete a channel
+  rpc DeleteChannel(Channels) returns (Response) {}
+
+  //List all channels avaliable
+  rpc ListChannels(Response) returns (stream Channels) {}
+
+  //Publich a message in a channel
+  rpc PublishMessage(Message) returns (Response) {}
+
+  //Register to the service
+  rpc Register(Credentials) returns (Response) {}
+
+  //Subscribe to a channel
+  rpc SubscribeToChannel(Subscriber) returns (Response) {}
+
+  //Consult the number of messages in a channel that the client is subscribed
+  rpc ConsultNumberOfMessages(Subscriber) returns (Response) {}
+
+  //Stream all messages from a channel
+  rpc GetMessageFromChannel(Subscriber) returns (stream Response) {}
+
+}
+
+enum Tipo{
+  SIMPLES = 0;
+  MULTIPLO = 1;
+}
+
+message Credentials {
+  string id = 1;
+  string password = 2;
+}
+
+message Subscriber {
+  Credentials credentials = 1;
+  string channel = 2;
+}
+
+message Channels {
+  string name = 1;
+  Tipo tipo = 2;
+}
+
+message Message {
+  string data = 1;
+  string channel = 2;
+}
+
+message Response {
+  string response = 1;
+  int32 status = 2;
+}
