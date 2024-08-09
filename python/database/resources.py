@@ -253,10 +253,8 @@ def list_subscribers_to_channels(channel):
             cur.execute(query,(channel,))
             subs = cur.fetchall()
             return subs
-
     except psycopg2.DatabaseError as error:
         print(f"Error: {error}")
-
     finally:
         if conn:
             release_connection(conn)

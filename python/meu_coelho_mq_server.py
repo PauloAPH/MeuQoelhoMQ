@@ -80,14 +80,14 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
     def SubscribeToChannel(self, request, context):
         if login(request.credentials):
             channel_map = RS.consult_channel(request.channel)
-            print(channel_map["channel"])
             if channel_map["status"] == 0 and channel_map["channel"] != None:
                 subs = RS.list_subscribers_to_channels(request.channel)
-                if not subs:
+                subs_list = [sub[0] for sub in subs]
+                if not subs_list:
                     RS.insert_subscribers(request.credentials.id , request.channel)
                     RS.update_subscribers_in_messages([request.credentials.id], request.channel)
                     response = "Inscrito na fila " + request.channel + " herdando mensagens"
-                elif request.credentials.id in subs[0]:
+                elif request.credentials.id in subs_list:
                     response = "Já cadastrado em " + request.channel
                 else:
                     RS.insert_subscribers(request.credentials.id , request.channel)
@@ -108,6 +108,8 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
     
     def GetMessageFromChannel(self, request, context):
         if login(request.credentials):
+            channel_map = RS.consult_channel(request.channel)
+            channel_type = channel_map["channel"][2]
             messages = RS.list_message_in_channel(request.channel)
             for msg in messages:
                 id = msg[0]
@@ -115,7 +117,8 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
                 subs = msg[3]
                 if request.credentials.id in subs:
                     subs.remove(request.credentials.id)
-                    if len(subs) == 0:
+                    if len(subs) == 0 or channel_type == "SIMPLES":
+                        print("deletando")
                         RS.delete_message(id)
                     else:
                         RS.update_message_subscribers(id, subs)
