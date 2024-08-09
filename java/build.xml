@@ -1,0 +1,56 @@
+<project name="JavaProject" basedir="." default="compile">
+
+    <!-- Set global properties for this build -->
+    <property name="src.dir" value="."/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="lib.dir" value="libs"/>
+    <property name="protos.dir" value="meuqoelhomq/protos"/>
+
+    <!-- Classpath to include all JARs in the libs directory -->
+    <path id="project.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement path="${classes.dir}"/>
+    </path>
+
+    <!-- Clean the build directory -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <!-- Create necessary directories -->
+    <target name="init">
+        <mkdir dir="${classes.dir}"/>
+    </target>
+
+    <!-- Compile the Java source files -->
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="project.classpath">
+            <include name="**/*.java"/>
+        </javac>
+    </target>
+
+    <!-- Create a JAR file from the compiled classes -->
+    <target name="jar" depends="compile">
+        <jar destfile="${build.dir}/java-project.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="MeuQoelhoMqClient"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- Run the application -->
+    <target name="run" depends="compile">
+        <java classname="MeuQoelhoMqClient" fork="true" classpathref="project.classpath">
+            <classpath>
+                <pathelement path="${classes.dir}"/>
+                <fileset dir="${lib.dir}">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+
+</project>

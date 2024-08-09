@@ -24,6 +24,11 @@
 #### Java
 ```
   protoc -I=. --java_out=java  protos/meu_coelho_mq.proto
+
+  protoc --java_out=java \
+       --grpc-java_out=java \
+       -I=. \
+       protos/meu_coelho_mq.proto
 ```
 #### Comandos PostgreSQL
 - Iniciar PostgreSQL
@@ -50,3 +55,26 @@ psql -h localhost -U postgres
 ```
 `\d
 ```
+
+
+
+# grpc-netty-shaded
+wget https://repo1.maven.org/maven2/io/grpc/grpc-netty-shaded/1.58.0/grpc-netty-shaded-1.58.0.jar
+
+# grpc-stub
+wget https://repo1.maven.org/maven2/io/grpc/grpc-stub/1.58.0/grpc-stub-1.58.0.jar
+
+# grpc-protobuf
+wget https://repo1.maven.org/maven2/io/grpc/grpc-protobuf/1.58.0/grpc-protobuf-1.58.0.jar
+
+# grpc-api
+wget https://repo1.maven.org/maven2/io/grpc/grpc-api/1.58.0/grpc-api-1.58.0.jar
+
+# protobuf-java
+wget https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.24.0/protobuf-java-3.24.0.jar
+
+# protobuf-java-util
+wget https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java-util/3.24.0/protobuf-java-util-3.24.0.jar
+
+# guava
+wget https://repo1.maven.org/maven2/com/google/guava/guava/32.1.2-jre/guava-32.1.2-jre.jar

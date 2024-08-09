@@ -118,7 +118,6 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
                 if request.credentials.id in subs:
                     subs.remove(request.credentials.id)
                     if len(subs) == 0 or channel_type == "SIMPLES":
-                        print("deletando")
                         RS.delete_message(id)
                     else:
                         RS.update_message_subscribers(id, subs)
