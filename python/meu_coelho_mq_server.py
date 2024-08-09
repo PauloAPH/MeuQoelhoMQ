@@ -46,9 +46,12 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
 
     def Register(self, request, context):
         password_hash = hash_value(request.password)
-        RS.create_user(request.id, password_hash)
-        response = "Usuario criado com sucesso"
-        return meu_coelho_mq_pb2.Response(response = response)
+        res = RS.create_user(request.id, password_hash)
+        if res["status"] == 0:
+            response = "Usuario criado com sucesso"
+        else:
+            response = "Usuario já existe"
+        return meu_coelho_mq_pb2.Response(response = response, status = res["status"])
 
     def CreateChannel(self, request, context):
         tipo = meu_coelho_mq_pb2.Tipo.Name(request.tipo)
@@ -76,14 +79,21 @@ class MeuCoelhoMQServicer(meu_coelho_mq_pb2_grpc.MeuCoelhoMQServicer):
     
     def SubscribeToChannel(self, request, context):
         if login(request.credentials):
-            channel_type = RS.consult_channel_type(request.channel)
-            subs = RS.consult_subscribers(request.channel)
-
-            if channel_type == "SIMPLES" and subs > 0:
-                response = "Acess denied, channel already being taken"
-            else: 
-                RS.insert_subscribers(request.credentials.id , request.channel)
-                response = "Inscrito na fila " + request.channel
+            channel_map = RS.consult_channel(request.channel)
+            print(channel_map["channel"])
+            if channel_map["status"] == 0 and channel_map["channel"] != None:
+                subs = RS.list_subscribers_to_channels(request.channel)
+                if not subs:
+                    RS.insert_subscribers(request.credentials.id , request.channel)
+                    RS.update_subscribers_in_messages([request.credentials.id], request.channel)
+                    response = "Inscrito na fila " + request.channel + " herdando mensagens"
+                elif request.credentials.id in subs[0]:
+                    response = "Já cadastrado em " + request.channel
+                else:
+                    RS.insert_subscribers(request.credentials.id , request.channel)
+                    response = "Inscrito na fila " + request.channel
+            else:
+                response = "Canal não existe"
         else:
             response = "Acess denied, wrong credentials"
         return meu_coelho_mq_pb2.Response(response = response)

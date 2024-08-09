@@ -4,6 +4,10 @@
 - Igor Ladeia de Freitas
 
 ### Comandos
+####
+```
+ sudo apt install protobuf-compiler
+```
 #### Comando para instalar gRPC tools
  ```
  pip install grpcio-tools 
@@ -19,7 +23,7 @@
 ```
 #### Java
 ```
-  protoc -I=. --java_out=. protos/meu_coelho_mq.proto
+  protoc -I=. --java_out=java  protos/meu_coelho_mq.proto
 ```
 #### Comandos PostgreSQL
 - Iniciar PostgreSQL
@@ -34,11 +38,15 @@ psql -h localhost -U postgres
 ```
 \l
  ```
--Entrar no database 
+- Entrar no database 
  ```
 \c meu_coelho_mq_database
  ```
 - Estrutura do database
 ```
  \dt 
+```
+- Entrar em uma tabela
+```
+`\d
 ```

@@ -21,11 +21,11 @@ def run():
         password = input("Senha: ")
         cred = meu_coelho_mq_pb2.Credentials(id = id, password = password)
         Client.create_user(stub, id, password)
-        Client.subscribe_to_channel(stub, cred, "Canal1")
-        sub = meu_coelho_mq_pb2.Subscriber(credentials = cred, channel = "Canal1")
+        Client.subscribe_to_channel(stub, cred, "Banana")
+        sub = meu_coelho_mq_pb2.Subscriber(credentials = cred, channel = "Canal3")
 
         while(1):
-            Client.get_messages_from_subscrition(stub, sub)
+            #Client.get_messages_from_subscrition(stub, sub)
             time.sleep(10)
 
 

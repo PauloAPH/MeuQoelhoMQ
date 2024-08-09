@@ -28,9 +28,10 @@ def create_user(user_id, password_hash):
             '''
             cur.execute(query, (user_id, password_hash))
             conn.commit()
-    except psycopg2.DatabaseError as error:
-        print(f"Error: {error}")
+            return {"status": 0}
 
+    except psycopg2.DatabaseError as error:
+        return {"status": 1}
     finally:
         if conn:
             release_connection(conn)
@@ -46,9 +47,9 @@ def insert_message(data, channel, subscribers):
             '''
             cur.execute(query, (data, channel, subscribers))
             conn.commit()
+            return {"status": 0}
     except psycopg2.DatabaseError as error:
-        print(f"Error: {error}")
-
+        return {"status": 1}
     finally:
         if conn:
             release_connection(conn)
@@ -64,8 +65,12 @@ def insert_channel(name, type):
             '''
             cur.execute(query, (name, type))
             conn.commit()
+            return {"status": 0}
     except psycopg2.DatabaseError as error:
-        print(f"Error: {error}")
+        return {"status": 1}
+    finally:
+        if conn:
+            release_connection(conn)
 
 def insert_subscribers(user_id, channel):
     try:
@@ -78,9 +83,9 @@ def insert_subscribers(user_id, channel):
             '''
             cur.execute(query, (user_id, channel))
             conn.commit()
+            return {"status": 0}
     except psycopg2.DatabaseError as error:
-        print(f"Error: {error}")
-
+        return {"status": 1}
     finally:
         if conn:
             release_connection(conn)
@@ -93,9 +98,9 @@ def delete_channel(name):
             query = ''' DELETE FROM channel WHERE name = %s;'''
             cur.execute(query, [name])
             conn.commit()
+            return {"status": 0}
     except psycopg2.DatabaseError as error:
-        print(f"Error: {error}")
-
+        return {"status": 1}
     finally:
         if conn:
             release_connection(conn)
@@ -108,9 +113,9 @@ def delete_message(message_id):
             query = ''' DELETE FROM message WHERE id = %s;'''
             cur.execute(query, [message_id])
             conn.commit()
+            return {"status": 0}
     except psycopg2.DatabaseError as error:
-        print(f"Error: {error}")
-
+        return {"status": 1}
     finally:
         if conn:
             release_connection(conn)
@@ -127,9 +132,27 @@ def update_message_subscribers(message_id, subscribers):
             ;'''
             cur.execute(query, (subscribers, message_id))
             conn.commit()
+            return {"status": 0}
     except psycopg2.DatabaseError as error:
-        print(f"Error: {error}")
+        return {"status": 1}
+    finally:
+        if conn:
+            release_connection(conn)
 
+def update_subscribers_in_messages(subscribers, channel_):
+    try:
+        # Get a connection from the pool
+        conn = get_connection()
+        with conn.cursor() as cur:
+            query = '''
+            UPDATE message
+            SET subscribers = %s
+            WHERE subscribers = '{}' AND channel = %s;
+            '''
+            cur.execute(query, (subscribers, channel_))
+            conn.commit()
+    except psycopg2.DatabaseError as error:
+        return {"status": 1}
     finally:
         if conn:
             release_connection(conn)
@@ -165,28 +188,24 @@ def consult_subscribers(channel):
             WHERE channel.name = %s;'''
             cur.execute(query, [channel])
             subs = cur.fetchone()
-            return subs[0]
-
+            return {"subs": subs[0], "status": 0}
     except psycopg2.DatabaseError as error:
-        print(f"Error: {error}")
-
+        return {"status": 1}
     finally:
         if conn:
             release_connection(conn)
 
-def consult_channel_type(channel):
+def consult_channel(channel):
     try:
         # Get a connection from the pool
         conn = get_connection()
         with conn.cursor() as cur:
-            query = '''SELECT type FROM channel WHERE name = %s;'''
+            query = '''SELECT * FROM channel WHERE name = %s;'''
             cur.execute(query, [channel])
-            type = cur.fetchone()
-            return type[0]
-
+            channel_ = cur.fetchone()
+            return {"channel": channel_, "status": 0}
     except psycopg2.DatabaseError as error:
-        print(f"Error: {error}")
-
+        return {"status": 1}
     finally:
         if conn:
             release_connection(conn)

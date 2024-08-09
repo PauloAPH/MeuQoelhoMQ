@@ -74,7 +74,7 @@ message Message {
   string channel = 2;
 }
 
-
 message Response {
   string response = 1;
+  int32 status = 2;
 }

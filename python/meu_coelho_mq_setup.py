@@ -16,10 +16,10 @@ def run():
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
     with grpc.insecure_channel("localhost:50051") as channel:
-        create_database.create_database()
+        #create_database.create_database()
         create_tables.create_tables()
         stub = meu_coelho_mq_pb2_grpc.MeuCoelhoMQStub(channel)
-        name = "Canal1"
+        name = "Canal3"
         tipo = "Simples"
         Client.create_channel_request(stub, name, tipo)
         name = "Canal2"
