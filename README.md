@@ -19,11 +19,27 @@
 #### Comando para gerar arquivos do protocol buffer: 
 #### Python
 ```
-  python3 -m grpc_tools.protoc -I. --python_out=python  --grpc_python_out=python  protos/meu_coelho_mq.proto
+  python3 -m grpc_tools.protoc -I. --python_out=python  --grpc_python_out=python  protos/meu_qoelho_mq.proto
 ```
 #### Java
+### Criando projeto com Maven
 ```
-  protoc -I=. --java_out=java  protos/meu_coelho_mq.proto
+mvn archetype:generate -DgroupId=meuqoelhomq \
+ -DartifactId=java_meuqoelhomq \
+ -DarchetypeArtifactId=maven-archetype-quickstart \
+ -DinteractiveMode=false
+```
+### Gerando pacote 
+```
+mvn package
+```
+### Compilando
+```
+mvn clean compile
+```
+### Gerando pacote 
+```
+mvn exec:java -Dexec.mainClass="meuqoelhomq.MeuQoelhoMqClient"
 ```
 #### Comandos PostgreSQL
 - Iniciar PostgreSQL
