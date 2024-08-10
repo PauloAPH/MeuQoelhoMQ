@@ -3,66 +3,66 @@
 - Paulo Alexandre Pizará Hayashida RA: 11201722652
 - Igor Ladeia de Freitas
 
-### Comandos
-####
+### Comandos Terminal
+#### Instalar protobuf compiler
 ```
  sudo apt install protobuf-compiler
 ```
+### Python
 #### Comando para instalar gRPC tools
  ```
  pip install grpcio-tools 
- ```
+```
 #### Comando para instalar psycopg2
  ```
  pip install psycopg2-binary
-  ```
-#### Comando para gerar arquivos do protocol buffer: 
-#### Python
 ```
-  python3 -m grpc_tools.protoc -I. --python_out=python  --grpc_python_out=python  protos/meu_qoelho_mq.proto
+#### Gerar protobuf e stubs em python
 ```
-#### Java
-### Criando projeto com Maven
+ python3 -m grpc_tools.protoc -I. --python_out=python  --grpc_python_out=python  protos/meu_qoelho_mq.proto
 ```
-mvn archetype:generate -DgroupId=meuqoelhomq \
+### Java
+#### Criando projeto com Maven
+```
+ mvn archetype:generate -DgroupId=meuqoelhomq \
  -DartifactId=java_meuqoelhomq \
  -DarchetypeArtifactId=maven-archetype-quickstart \
  -DinteractiveMode=false
 ```
-### Gerando pacote 
+#### Gerando pacote 
 ```
-mvn package
+ mvn package
 ```
-### Compilando
+#### Compilando
 ```
-mvn clean compile
+ mvn clean compile
 ```
-### Gerando pacote 
+#### Gerando pacote 
 ```
-mvn exec:java -Dexec.mainClass="meuqoelhomq.MeuQoelhoMqClient"
+ mvn exec:java -Dexec.mainClass="meuqoelhomq.MeuQoelhoMqClient"
 ```
-#### Comandos PostgreSQL
-- Iniciar PostgreSQL
+### Comandos PostgreSQL
+#### Iniciar PostgreSQL
  ```
  sudo systemctl start postgresql
  ```
-- Entrar no PostgreSQL
+#### Entrar no PostgreSQL
  ```
-psql -h localhost -U postgres
+ psql -h localhost -U postgres
  ```
-- Listar databases (dentro do terminal psql)
+#### Listar databases (dentro do terminal psql)
 ```
 \l
  ```
-- Entrar no database 
+#### Entrar no database 
  ```
-\c meu_coelho_mq_database
+ \c meu_coelho_mq_database
  ```
-- Estrutura do database
+#### Estrutura do database
 ```
  \dt 
 ```
-- Entrar em uma tabela
+#### Entrar em uma tabela
 ```
 `\d
 ```
