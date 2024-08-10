@@ -13,8 +13,8 @@
 // limitations under the License.
 
 syntax = "proto3";
-
-package MeuQoelhoMQProto;
+option java_multiple_files =  true;
+package meuqoelhomq;
 
 // Interface exported by the server.
 service MeuQoelhoMQ {

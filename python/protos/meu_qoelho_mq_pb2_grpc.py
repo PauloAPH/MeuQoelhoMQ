@@ -41,42 +41,42 @@ class MeuQoelhoMQStub(object):
             channel: A grpc.Channel.
         """
         self.CreateChannel = channel.unary_unary(
-                '/MeuQoelhoMQProto.MeuQoelhoMQ/CreateChannel',
+                '/meuqoelhomq.MeuQoelhoMQ/CreateChannel',
                 request_serializer=protos_dot_meu__qoelho__mq__pb2.Channels.SerializeToString,
                 response_deserializer=protos_dot_meu__qoelho__mq__pb2.Response.FromString,
                 _registered_method=True)
         self.DeleteChannel = channel.unary_unary(
-                '/MeuQoelhoMQProto.MeuQoelhoMQ/DeleteChannel',
+                '/meuqoelhomq.MeuQoelhoMQ/DeleteChannel',
                 request_serializer=protos_dot_meu__qoelho__mq__pb2.Channels.SerializeToString,
                 response_deserializer=protos_dot_meu__qoelho__mq__pb2.Response.FromString,
                 _registered_method=True)
         self.ListChannels = channel.unary_stream(
-                '/MeuQoelhoMQProto.MeuQoelhoMQ/ListChannels',
+                '/meuqoelhomq.MeuQoelhoMQ/ListChannels',
                 request_serializer=protos_dot_meu__qoelho__mq__pb2.Response.SerializeToString,
                 response_deserializer=protos_dot_meu__qoelho__mq__pb2.Channels.FromString,
                 _registered_method=True)
         self.PublishMessage = channel.unary_unary(
-                '/MeuQoelhoMQProto.MeuQoelhoMQ/PublishMessage',
+                '/meuqoelhomq.MeuQoelhoMQ/PublishMessage',
                 request_serializer=protos_dot_meu__qoelho__mq__pb2.Message.SerializeToString,
                 response_deserializer=protos_dot_meu__qoelho__mq__pb2.Response.FromString,
                 _registered_method=True)
         self.Register = channel.unary_unary(
-                '/MeuQoelhoMQProto.MeuQoelhoMQ/Register',
+                '/meuqoelhomq.MeuQoelhoMQ/Register',
                 request_serializer=protos_dot_meu__qoelho__mq__pb2.Credentials.SerializeToString,
                 response_deserializer=protos_dot_meu__qoelho__mq__pb2.Response.FromString,
                 _registered_method=True)
         self.SubscribeToChannel = channel.unary_unary(
-                '/MeuQoelhoMQProto.MeuQoelhoMQ/SubscribeToChannel',
+                '/meuqoelhomq.MeuQoelhoMQ/SubscribeToChannel',
                 request_serializer=protos_dot_meu__qoelho__mq__pb2.Subscriber.SerializeToString,
                 response_deserializer=protos_dot_meu__qoelho__mq__pb2.Response.FromString,
                 _registered_method=True)
         self.ConsultNumberOfMessages = channel.unary_unary(
-                '/MeuQoelhoMQProto.MeuQoelhoMQ/ConsultNumberOfMessages',
+                '/meuqoelhomq.MeuQoelhoMQ/ConsultNumberOfMessages',
                 request_serializer=protos_dot_meu__qoelho__mq__pb2.Subscriber.SerializeToString,
                 response_deserializer=protos_dot_meu__qoelho__mq__pb2.Response.FromString,
                 _registered_method=True)
         self.GetMessageFromChannel = channel.unary_stream(
-                '/MeuQoelhoMQProto.MeuQoelhoMQ/GetMessageFromChannel',
+                '/meuqoelhomq.MeuQoelhoMQ/GetMessageFromChannel',
                 request_serializer=protos_dot_meu__qoelho__mq__pb2.Subscriber.SerializeToString,
                 response_deserializer=protos_dot_meu__qoelho__mq__pb2.Response.FromString,
                 _registered_method=True)
@@ -187,9 +187,9 @@ def add_MeuQoelhoMQServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'MeuQoelhoMQProto.MeuQoelhoMQ', rpc_method_handlers)
+            'meuqoelhomq.MeuQoelhoMQ', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('MeuQoelhoMQProto.MeuQoelhoMQ', rpc_method_handlers)
+    server.add_registered_method_handlers('meuqoelhomq.MeuQoelhoMQ', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
@@ -211,7 +211,7 @@ class MeuQoelhoMQ(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/MeuQoelhoMQProto.MeuQoelhoMQ/CreateChannel',
+            '/meuqoelhomq.MeuQoelhoMQ/CreateChannel',
             protos_dot_meu__qoelho__mq__pb2.Channels.SerializeToString,
             protos_dot_meu__qoelho__mq__pb2.Response.FromString,
             options,
@@ -238,7 +238,7 @@ class MeuQoelhoMQ(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/MeuQoelhoMQProto.MeuQoelhoMQ/DeleteChannel',
+            '/meuqoelhomq.MeuQoelhoMQ/DeleteChannel',
             protos_dot_meu__qoelho__mq__pb2.Channels.SerializeToString,
             protos_dot_meu__qoelho__mq__pb2.Response.FromString,
             options,
@@ -265,7 +265,7 @@ class MeuQoelhoMQ(object):
         return grpc.experimental.unary_stream(
             request,
             target,
-            '/MeuQoelhoMQProto.MeuQoelhoMQ/ListChannels',
+            '/meuqoelhomq.MeuQoelhoMQ/ListChannels',
             protos_dot_meu__qoelho__mq__pb2.Response.SerializeToString,
             protos_dot_meu__qoelho__mq__pb2.Channels.FromString,
             options,
@@ -292,7 +292,7 @@ class MeuQoelhoMQ(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/MeuQoelhoMQProto.MeuQoelhoMQ/PublishMessage',
+            '/meuqoelhomq.MeuQoelhoMQ/PublishMessage',
             protos_dot_meu__qoelho__mq__pb2.Message.SerializeToString,
             protos_dot_meu__qoelho__mq__pb2.Response.FromString,
             options,
@@ -319,7 +319,7 @@ class MeuQoelhoMQ(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/MeuQoelhoMQProto.MeuQoelhoMQ/Register',
+            '/meuqoelhomq.MeuQoelhoMQ/Register',
             protos_dot_meu__qoelho__mq__pb2.Credentials.SerializeToString,
             protos_dot_meu__qoelho__mq__pb2.Response.FromString,
             options,
@@ -346,7 +346,7 @@ class MeuQoelhoMQ(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/MeuQoelhoMQProto.MeuQoelhoMQ/SubscribeToChannel',
+            '/meuqoelhomq.MeuQoelhoMQ/SubscribeToChannel',
             protos_dot_meu__qoelho__mq__pb2.Subscriber.SerializeToString,
             protos_dot_meu__qoelho__mq__pb2.Response.FromString,
             options,
@@ -373,7 +373,7 @@ class MeuQoelhoMQ(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/MeuQoelhoMQProto.MeuQoelhoMQ/ConsultNumberOfMessages',
+            '/meuqoelhomq.MeuQoelhoMQ/ConsultNumberOfMessages',
             protos_dot_meu__qoelho__mq__pb2.Subscriber.SerializeToString,
             protos_dot_meu__qoelho__mq__pb2.Response.FromString,
             options,
@@ -400,7 +400,7 @@ class MeuQoelhoMQ(object):
         return grpc.experimental.unary_stream(
             request,
             target,
-            '/MeuQoelhoMQProto.MeuQoelhoMQ/GetMessageFromChannel',
+            '/meuqoelhomq.MeuQoelhoMQ/GetMessageFromChannel',
             protos_dot_meu__qoelho__mq__pb2.Subscriber.SerializeToString,
             protos_dot_meu__qoelho__mq__pb2.Response.FromString,
             options,

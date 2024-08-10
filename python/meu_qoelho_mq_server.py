@@ -50,7 +50,7 @@ class MeuQoelhoMQServicer(meu_qoelho_mq_pb2_grpc.MeuQoelhoMQServicer):
         if res["status"] == 0:
             response = "Usuario criado com sucesso"
         else:
-            response = "Usuario já existe"
+            response = "Usuario ja existe"
         return meu_qoelho_mq_pb2.Response(response = response, status = res["status"])
 
     def CreateChannel(self, request, context):
