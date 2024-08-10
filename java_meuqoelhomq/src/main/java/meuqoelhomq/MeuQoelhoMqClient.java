@@ -27,6 +27,23 @@ public class MeuQoelhoMqClient {
     asyncStub = MeuQoelhoMQGrpc.newStub(channel);
   }
 
+    /**
+   * Create a channel
+   *
+   * @param name channel name
+   * @param tipo channel type
+   */
+  public void createChannel(String name, String tipo) {
+    meuqoelhomq.Channels channel;
+    if (tipo.equals("simples")) {
+      channel = meuqoelhomq.Channels.newBuilder().setName(name).setTipo(Tipo.SIMPLES).build();
+    } else {
+      channel = meuqoelhomq.Channels.newBuilder().setName(name).setTipo(Tipo.MULTIPLO).build();
+    }
+    meuqoelhomq.Response res = blockingStub.createChannel(channel);
+    System.out.println(res.getResponse());
+  }
+
   /**
    * Create a user in server
    *
@@ -99,6 +116,7 @@ public class MeuQoelhoMqClient {
     MeuQoelhoMqClient client = new MeuQoelhoMqClient(channel);
     Scanner scanner = new Scanner(System.in);
 
+    client.createChannel("Canal4", "Simples");
     System.out.print("Id: ");
     String id = scanner.nextLine();
     System.out.print("Senha: ");

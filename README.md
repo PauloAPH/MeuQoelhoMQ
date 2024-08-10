@@ -43,26 +43,26 @@
 ```
 ### Comandos PostgreSQL
 #### Iniciar PostgreSQL
- ```
- sudo systemctl start postgresql
- ```
+```
+sudo systemctl start postgresql
+```
 #### Entrar no PostgreSQL
- ```
- psql -h localhost -U postgres
- ```
+```
+psql -h localhost -U postgres
+```
 #### Listar databases (dentro do terminal psql)
 ```
 \l
- ```
+```
 #### Entrar no database 
- ```
- \c meu_coelho_mq_database
- ```
+```
+\c meu_coelho_mq_database
+```
 #### Estrutura do database
 ```
- \dt 
+\dt 
 ```
 #### Entrar em uma tabela
 ```
-`\d
+\d
 ```
