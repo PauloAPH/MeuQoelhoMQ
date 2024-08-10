@@ -19,11 +19,51 @@ public class MeuQoelhoMqClient {
   private final MeuQoelhoMQGrpc.MeuQoelhoMQBlockingStub blockingStub;
   private final MeuQoelhoMQGrpc.MeuQoelhoMQStub asyncStub;
 
+  /**
+   * Contructor
+   */
   public MeuQoelhoMqClient(Channel channel) {
     blockingStub = MeuQoelhoMQGrpc.newBlockingStub(channel);
     asyncStub = MeuQoelhoMQGrpc.newStub(channel);
   }
 
+  /**
+   * Create a user in server
+   *
+   * @param id       user id
+   * @param password user password
+   */
+  public void createUser(String id, String password) {
+    meuqoelhomq.Credentials cred = meuqoelhomq.Credentials.newBuilder().setId(id).setPassword(password).build();
+    meuqoelhomq.Response res = blockingStub.register(cred);
+    System.out.println(res.getResponse());
+  }
+
+  /**
+   * Get messages from a channel already subscribed
+   *
+   * @param id       user id
+   * @param password user password
+   * @param channel  channel to subscribe
+   */
+  public void getMessagesFromSubscrition(String id, String password, String channel) {
+    meuqoelhomq.Credentials cred = meuqoelhomq.Credentials.newBuilder().setId(id).setPassword(password).build();
+    Subscriber sub = meuqoelhomq.Subscriber.newBuilder().setChannel(channel).setCredentials(cred).build();
+    Iterator<meuqoelhomq.Response> responses;
+    try {
+      responses = blockingStub.getMessageFromChannel(sub);
+      for (int i = 1; responses.hasNext(); i++) {
+        meuqoelhomq.Response response_ = responses.next();
+        System.out.println(response_.getResponse());
+      }
+    } catch (StatusRuntimeException e) {
+      System.out.println("Falha na conexão");
+    }
+  }
+
+  /**
+   * list channels from server.
+   */
   public void listChannels() {
     meuqoelhomq.Response res = meuqoelhomq.Response.newBuilder().setResponse("channel_name").build();
     Iterator<meuqoelhomq.Channels> channels;
@@ -36,13 +76,20 @@ public class MeuQoelhoMqClient {
     } catch (StatusRuntimeException e) {
       System.out.println("Falha na conexão");
     }
-
   }
 
-  public void createUser(String id, String password) {
+  /**
+   * Subscribe a user to a channel.
+   *
+   * @param id       user id
+   * @param password user password
+   * @param channel  channel to subscribe
+   */
+  public void subscribeToChannel(String id, String password, String channel) {
     meuqoelhomq.Credentials cred = meuqoelhomq.Credentials.newBuilder().setId(id).setPassword(password).build();
-    meuqoelhomq.Response res = blockingStub.register(cred);
-    System.out.println(res);
+    Subscriber sub = meuqoelhomq.Subscriber.newBuilder().setChannel(channel).setCredentials(cred).build();
+    meuqoelhomq.Response res = blockingStub.subscribeToChannel(sub);
+    System.out.println(res.getResponse());
   }
 
   public static void main(String[] args) throws InterruptedException {
@@ -50,25 +97,21 @@ public class MeuQoelhoMqClient {
         .usePlaintext()
         .build();
     MeuQoelhoMqClient client = new MeuQoelhoMqClient(channel);
-    client.listChannels();
     Scanner scanner = new Scanner(System.in);
+
     System.out.print("Id: ");
     String id = scanner.nextLine();
     System.out.print("Senha: ");
     String password = scanner.nextLine();
     client.createUser(id, password);
-
-
-
-
-    channel.shutdown();
-
-    // meuqoelhomq.Channels channel =
-    // meuqoelhomq.Channels.newBuilder().setName("Canal1").build();
-    // meuqoelhomq.Credentials cred =
-    // meuqoelhomq.Credentials.newBuilder().setId("Paulo").setPassword("92930506").build();
-    // Subscriber sub =
-    // meuqoelhomq.Subscriber.newBuilder().setChannel(channel_name).setCredentials(cred).build();
-
+    System.out.println("Canais disponiveis");
+    client.listChannels();
+    System.out.println("Selecione o canal: ");
+    String channelToSubscribe = scanner.nextLine();
+    client.subscribeToChannel(id, password, channelToSubscribe);
+    while(true) {
+      client.getMessagesFromSubscrition(id, password, channelToSubscribe);
+      Thread.sleep(10000);
+    }
   }
 }
