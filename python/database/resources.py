@@ -49,6 +49,7 @@ def insert_message(data, channel, subscribers):
             conn.commit()
             return {"status": 0}
     except psycopg2.DatabaseError as error:
+        print(error)
         return {"status": 1}
     finally:
         if conn:
@@ -151,6 +152,7 @@ def update_subscribers_in_messages(subscribers, channel_):
             '''
             cur.execute(query, (subscribers, channel_))
             conn.commit()
+            return {"status": 0}
     except psycopg2.DatabaseError as error:
         return {"status": 1}
     finally:

@@ -8,6 +8,7 @@ from meu_qoelho_mq_client import Client
 
 from database import create_tables
 from database import create_database
+from database import resources as RS
 from protos import meu_qoelho_mq_pb2
 from protos import meu_qoelho_mq_pb2_grpc
 
@@ -18,13 +19,19 @@ def run():
     with grpc.insecure_channel("localhost:50051") as channel:
         #create_database.create_database()
         create_tables.create_tables()
-        stub = meu_qoelho_mq_pb2_grpc.MeuQoelhoMQStub(channel)
-        name = "Canal3"
-        tipo = "Simples"
-        Client.create_channel_request(stub, name, tipo)
-        name = "Canal2"
-        tipo = "Multiplo"
-        Client.create_channel_request(stub, name, tipo)
+        res_canal1 = RS.insert_channel("Canal1", "SIMPLES")
+        if res_canal1["status"] == 0:
+            response = "Canal1 criado com sucesso"
+        else:
+            response = "Erro ao criar canal."
+        print(response)
+        res_canal2 = RS.insert_channel("Canal2", "MULTIPLO")
+        if res_canal2["status"] == 0:
+            response = "Canal2 criado com sucesso"
+        else:
+            response = "Erro ao criar canal."
+        print(response)
+
         
 
 if __name__ == "__main__":

@@ -65,7 +65,7 @@ public class MeuQoelhoMqClient {
    */
   public void getMessagesFromSubscrition(String id, String password, String channel) {
     meuqoelhomq.Credentials cred = meuqoelhomq.Credentials.newBuilder().setId(id).setPassword(password).build();
-    Subscriber sub = meuqoelhomq.Subscriber.newBuilder().setChannel(channel).setCredentials(cred).build();
+    meuqoelhomq.Subscriber sub = meuqoelhomq.Subscriber.newBuilder().setChannel(channel).setCredentials(cred).build();
     Iterator<meuqoelhomq.Response> responses;
     try {
       responses = blockingStub.getMessageFromChannel(sub);
@@ -104,7 +104,7 @@ public class MeuQoelhoMqClient {
    */
   public void subscribeToChannel(String id, String password, String channel) {
     meuqoelhomq.Credentials cred = meuqoelhomq.Credentials.newBuilder().setId(id).setPassword(password).build();
-    Subscriber sub = meuqoelhomq.Subscriber.newBuilder().setChannel(channel).setCredentials(cred).build();
+    meuqoelhomq.Subscriber sub = meuqoelhomq.Subscriber.newBuilder().setChannel(channel).setCredentials(cred).build();
     meuqoelhomq.Response res = blockingStub.subscribeToChannel(sub);
     System.out.println(res.getResponse());
   }
@@ -115,8 +115,6 @@ public class MeuQoelhoMqClient {
         .build();
     MeuQoelhoMqClient client = new MeuQoelhoMqClient(channel);
     Scanner scanner = new Scanner(System.in);
-
-    client.createChannel("Canal4", "Simples");
     System.out.print("Id: ");
     String id = scanner.nextLine();
     System.out.print("Senha: ");

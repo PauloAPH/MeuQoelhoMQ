@@ -82,9 +82,9 @@ class MeuQoelhoMQServicer(meu_qoelho_mq_pb2_grpc.MeuQoelhoMQServicer):
         subs = [t[0] for t in subs]
         res = RS.insert_message(request.data, request.channel, subs)
         if res["status"] == 0:
-            response = "Mensagem Publicada na fila" + request.channel
+            response = "Mensagem Publicada na fila " + request.channel
         else:
-            response = "Erro ao publicar no canal canal."
+            response = "Erro ao publicar no canal."
         return meu_qoelho_mq_pb2.Response(response = response)
     
     def SubscribeToChannel(self, request, context):
@@ -96,6 +96,8 @@ class MeuQoelhoMQServicer(meu_qoelho_mq_pb2_grpc.MeuQoelhoMQServicer):
                 if not subs_list:
                     insert_res = RS.insert_subscribers(request.credentials.id , request.channel)
                     update_res = RS.update_subscribers_in_messages([request.credentials.id], request.channel)
+                    print(insert_res)
+                    print(update_res)
                     if insert_res["status"] == 0 and update_res["status"] == 0:
                         response = "Inscrito na fila " + request.channel + " herdando mensagens"
                         status = 0
@@ -141,7 +143,7 @@ class MeuQoelhoMQServicer(meu_qoelho_mq_pb2_grpc.MeuQoelhoMQServicer):
                 if request.credentials.id in subs:
                     subs.remove(request.credentials.id)
                     if len(subs) == 0 or channel_type == "SIMPLES":
-                        print("deletando")
+                        print("Mensagem consumida")
                         RS.delete_message(id)
                     else:
                         RS.update_message_subscribers(id, subs)

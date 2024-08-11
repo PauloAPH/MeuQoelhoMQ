@@ -64,6 +64,7 @@ class Client():
     def publish_message(stub, data_in, channel_in):
         msg = meu_qoelho_mq_pb2.Message(data = data_in, channel = channel_in)
         res = stub.PublishMessage(msg)
+        print(res.response)
 
     def subscribe_to_channel(stub, cred, channel):
         subs = meu_qoelho_mq_pb2.Subscriber(credentials = cred, channel = channel)
