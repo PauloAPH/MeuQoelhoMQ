@@ -91,19 +91,32 @@ class MeuQoelhoMQServicer(meu_qoelho_mq_pb2_grpc.MeuQoelhoMQServicer):
                 subs = RS.list_subscribers_to_channels(request.channel)
                 subs_list = [sub[0] for sub in subs]
                 if not subs_list:
-                    RS.insert_subscribers(request.credentials.id , request.channel)
-                    RS.update_subscribers_in_messages([request.credentials.id], request.channel)
-                    response = "Inscrito na fila " + request.channel + " herdando mensagens"
+                    insert_res = RS.insert_subscribers(request.credentials.id , request.channel)
+                    update_res = RS.update_subscribers_in_messages([request.credentials.id], request.channel)
+                    if insert_res.status == 0 and update_res.status == 0:
+                        response = "Inscrito na fila " + request.channel + " herdando mensagens"
+                        status = 0
+                    else:
+                        response = "Erro na inscrição"
+                        status = 1
                 elif request.credentials.id in subs_list:
                     response = "Já cadastrado em " + request.channel
+                    status = 0
                 else:
-                    RS.insert_subscribers(request.credentials.id , request.channel)
-                    response = "Inscrito na fila " + request.channel
+                    insert_res = RS.insert_subscribers(request.credentials.id , request.channel)
+                    if insert_res.status == 0:
+                        response = "Inscrito na fila " + request.channel
+                        status = 0
+                    else:
+                        response = "Erro na inscrição"
+                        status = 1
             else:
                 response = "Canal não existe"
+                status = 1
         else:
             response = "Acess denied, wrong credentials"
-        return meu_qoelho_mq_pb2.Response(response = response)
+            status = 1
+        return meu_qoelho_mq_pb2.Response(response = response, status = status)
     
     def ConsultNumberOfMessages(self, request, context):
         if login(request.credentials):

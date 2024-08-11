@@ -18,7 +18,7 @@ class TestMeuQoelhoMQClient(unittest.TestCase):
         tipo = "Simples"
         channel = meu_qoelho_mq_pb2.Channels(name = 'test_channel', tipo = meu_qoelho_mq_pb2.Tipo.SIMPLES)
 
-        mock_response = meu_qoelho_mq_pb2.Response(response = "Request recebida " + name + " do tipo " + tipo, status=0)
+        mock_response = meu_qoelho_mq_pb2.Response(response = "Request recebida " + name + " do tipo " + tipo, status = 0)
         self.mock_stub.CreateChannel = MagicMock(return_value=mock_response)
 
         expected_response = "Canal criado com sucesso"
@@ -33,7 +33,7 @@ class TestMeuQoelhoMQClient(unittest.TestCase):
         tipo = "Multiplo"
         channel = meu_qoelho_mq_pb2.Channels(name = 'test_channel', tipo = meu_qoelho_mq_pb2.Tipo.MULTIPLO)
 
-        mock_response = meu_qoelho_mq_pb2.Response(response = "Request recebida " + name + " do tipo " + tipo, status=0)
+        mock_response = meu_qoelho_mq_pb2.Response(response = "Request recebida " + name + " do tipo " + tipo, status = 0)
         self.mock_stub.CreateChannel = MagicMock(return_value=mock_response)
         expected_response = "Canal criado com sucesso"
         result_response = Client.create_channel_request(self.mock_stub, name, tipo)
@@ -47,7 +47,7 @@ class TestMeuQoelhoMQClient(unittest.TestCase):
         tipo = "Simples"
         channel = meu_qoelho_mq_pb2.Channels(name = 'test_channel', tipo = meu_qoelho_mq_pb2.Tipo.SIMPLES)
 
-        mock_response = meu_qoelho_mq_pb2.Response(response = "Erro ao criar canal.", status=1)
+        mock_response = meu_qoelho_mq_pb2.Response(response = "Erro ao criar canal.", status = 1)
         self.mock_stub.CreateChannel = MagicMock(return_value=mock_response)
 
         expected_response = "Erro ao criar usuario"
@@ -62,7 +62,7 @@ class TestMeuQoelhoMQClient(unittest.TestCase):
         tipo = "Multiplo"
         channel = meu_qoelho_mq_pb2.Channels(name = 'test_channel', tipo = meu_qoelho_mq_pb2.Tipo.MULTIPLO)
 
-        mock_response = meu_qoelho_mq_pb2.Response(response = "Erro ao criar canal.", status=1)
+        mock_response = meu_qoelho_mq_pb2.Response(response = "Erro ao criar canal.", status = 1)
         self.mock_stub.CreateChannel = MagicMock(return_value=mock_response)
 
         expected_response = "Erro ao criar usuario"
@@ -80,7 +80,7 @@ class TestMeuQoelhoMQClient(unittest.TestCase):
         password = "123456"
         user = meu_qoelho_mq_pb2.Credentials(id = id, password = password)
 
-        mock_response = meu_qoelho_mq_pb2.Response(response = "Usuario criado com sucesso", status=0)
+        mock_response = meu_qoelho_mq_pb2.Response(response = "Usuario criado com sucesso", status = 0)
         self.mock_stub.Register = MagicMock(return_value=mock_response)
 
         expected_response = "Usuario criado com sucesso"
@@ -95,7 +95,7 @@ class TestMeuQoelhoMQClient(unittest.TestCase):
         password = "123456"
         user = meu_qoelho_mq_pb2.Credentials(id = id, password = password)
 
-        mock_response = meu_qoelho_mq_pb2.Response(response = "Erro ao criar canal.", status=1)
+        mock_response = meu_qoelho_mq_pb2.Response(response = "Erro ao criar canal.", status = 1)
         self.mock_stub.Register = MagicMock(return_value=mock_response)
 
         expected_response = "Erro ao criar usuario"
@@ -110,7 +110,7 @@ class TestMeuQoelhoMQClient(unittest.TestCase):
         name = "test_channel"
         channel = meu_qoelho_mq_pb2.Channels(name = name)
 
-        mock_response = meu_qoelho_mq_pb2.Response(response = name + " deletado", status=0)
+        mock_response = meu_qoelho_mq_pb2.Response(response = name + " deletado", status = 0)
         self.mock_stub.DeleteChannel = MagicMock(return_value=mock_response)
 
         expected_response = "Canal deletado com sucesso"
@@ -124,13 +124,100 @@ class TestMeuQoelhoMQClient(unittest.TestCase):
         name = "test_channel"
         channel = meu_qoelho_mq_pb2.Channels(name = name)
 
-        mock_response = meu_qoelho_mq_pb2.Response(response = "Erro ao deletar canal.", status=1)
+        mock_response = meu_qoelho_mq_pb2.Response(response = "Erro ao deletar canal.", status = 1)
         self.mock_stub.DeleteChannel = MagicMock(return_value=mock_response)
 
         expected_response = "Erro ao deletar canal" 
         result_response = Client.delete_channel_request(self.mock_stub, name)
 
         self.mock_stub.DeleteChannel.assert_called_once_with(channel)
+        self.assertEqual(expected_response, result_response)
+
+        #subscribe_to_channel
+
+    def test_subscribe_to_channel_new_valid_user(self):
+        # Mock
+        name = "test_channel"
+        id = "Usuario"
+        password = "123456"
+        user = meu_qoelho_mq_pb2.Credentials(id = id, password = password)
+        subs = meu_qoelho_mq_pb2.Subscriber(credentials = user, channel = name)
+
+        mock_response = meu_qoelho_mq_pb2.Response(response = "Inscrito na fila " + name, status = 0)
+        self.mock_stub.SubscribeToChannel = MagicMock(return_value=mock_response)
+
+        expected_response = "Inscrito na fila " + name
+        result_response = Client.subscribe_to_channel(self.mock_stub, user, name)
+
+        self.mock_stub.SubscribeToChannel.assert_called_once_with(subs)
+        self.assertEqual(expected_response, result_response)
+
+    def test_subscribe_to_channel_already_subscribed_valid_user(self):
+        # Mock
+        name = "test_channel"
+        id = "Usuario"
+        password = "123456"
+        user = meu_qoelho_mq_pb2.Credentials(id = id, password = password)
+        subs = meu_qoelho_mq_pb2.Subscriber(credentials = user, channel = name)
+
+        mock_response = meu_qoelho_mq_pb2.Response(response = "Já cadastrado em " + name, status = 0)
+        self.mock_stub.SubscribeToChannel = MagicMock(return_value=mock_response)
+
+        expected_response = "Já cadastrado em " + name
+        result_response = Client.subscribe_to_channel(self.mock_stub, user, name)
+
+        self.mock_stub.SubscribeToChannel.assert_called_once_with(subs)
+        self.assertEqual(expected_response, result_response)
+
+    def test_subscribe_to_channel_with_old_msg_valid_user(self):
+        # Mock
+        name = "test_channel"
+        id = "Usuario"
+        password = "123456"
+        user = meu_qoelho_mq_pb2.Credentials(id = id, password = password)
+        subs = meu_qoelho_mq_pb2.Subscriber(credentials = user, channel = name)
+
+        mock_response = meu_qoelho_mq_pb2.Response(response = "Inscrito na fila " + name + " herdando mensagens", status = 0)
+        self.mock_stub.SubscribeToChannel = MagicMock(return_value=mock_response)
+
+        expected_response = "Inscrito na fila " + name + " herdando mensagens"
+        result_response = Client.subscribe_to_channel(self.mock_stub, user, name)
+
+        self.mock_stub.SubscribeToChannel.assert_called_once_with(subs)
+        self.assertEqual(expected_response, result_response)
+
+    def test_subscribe_to_channel_database_error(self):
+        # Mock
+        name = "test_channel"
+        id = "Usuario"
+        password = "123456"
+        user = meu_qoelho_mq_pb2.Credentials(id = id, password = password)
+        subs = meu_qoelho_mq_pb2.Subscriber(credentials = user, channel = name)
+
+        mock_response = meu_qoelho_mq_pb2.Response(response = "Erro na inscrição", status = 1)
+        self.mock_stub.SubscribeToChannel = MagicMock(return_value=mock_response)
+
+        expected_response = "ERROR: Erro na inscrição"
+        result_response = Client.subscribe_to_channel(self.mock_stub, user, name)
+
+        self.mock_stub.SubscribeToChannel.assert_called_once_with(subs)
+        self.assertEqual(expected_response, result_response)
+
+    def test_subscribe_to_channel_channel_invalid(self):
+        # Mock
+        name = "test_channel"
+        id = "Usuario"
+        password = "123456"
+        user = meu_qoelho_mq_pb2.Credentials(id = id, password = password)
+        subs = meu_qoelho_mq_pb2.Subscriber(credentials = user, channel = name)
+
+        mock_response = meu_qoelho_mq_pb2.Response(response = "Canal não existe", status = 1)
+        self.mock_stub.SubscribeToChannel = MagicMock(return_value=mock_response)
+
+        expected_response = "ERROR: Canal não existe"
+        result_response = Client.subscribe_to_channel(self.mock_stub, user, name)
+
+        self.mock_stub.SubscribeToChannel.assert_called_once_with(subs)
         self.assertEqual(expected_response, result_response)
 
 if __name__ == '__main__':

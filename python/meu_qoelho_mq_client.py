@@ -67,7 +67,10 @@ class Client():
     def subscribe_to_channel(stub, cred, channel):
         subs = meu_qoelho_mq_pb2.Subscriber(credentials = cred, channel = channel)
         res = stub.SubscribeToChannel(subs)
-        print(res)
+        if res.status == 0:
+            return res.response
+        else: 
+            return "ERROR: " + res.response
 
     def consult_messages_in_channel(stub):
         cred = meu_qoelho_mq_pb2.Credentials(id = "Paulo", password = "123456")
