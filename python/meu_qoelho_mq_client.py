@@ -41,13 +41,17 @@ class Client():
             channel.tipo = meu_qoelho_mq_pb2.Tipo.MULTIPLO
         res = stub.CreateChannel(channel)
         if res.status == 0:
-            return "Usuario criado com sucesso"
+            return "Canal criado com sucesso"
         else:
             return "Erro ao criar usuario"
 
     def delete_channel_request(stub):
         channel = meu_qoelho_mq_pb2.Channels(name = "Canal1", tipo = 1)
-        stub.DeleteChannel(channel)
+        res = stub.DeleteChannel(channel)
+        if res.status == 0:
+            return "Canal deletado com sucesso"
+        else:
+            return "Erro ao deletar canal"        
 
     def list_channels(stub):
         channel_out = meu_qoelho_mq_pb2.Channels(name = "Canal1", tipo = 1)
