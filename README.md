@@ -1,7 +1,7 @@
 # Projeto da disciplina MCTA025-13-Sistemas Distribuidos UFABC - 2024
 ## Autores: 
 - Paulo Alexandre Pizará Hayashida RA: 11201722652
-- Igor Ladeia de Freitas
+- Igor Ladeia de Freitas RA: 11201922180
 
 ### Comandos Terminal
 #### Instalar protobuf compiler
