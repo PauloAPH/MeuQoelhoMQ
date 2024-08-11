@@ -17,7 +17,9 @@ def run():
     with grpc.insecure_channel("localhost:50051") as channel:
         stub = meu_qoelho_mq_pb2_grpc.MeuQoelhoMQStub(channel)
         print("Canais disponiveis")
-        Client.list_channels(stub)
+        channels = Client.list_channels(stub)
+        for channel in channels:
+            print(channel)
         channel = input("Canal para publicação: ")
 
         while(1):

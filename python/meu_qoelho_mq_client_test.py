@@ -133,8 +133,7 @@ class TestMeuQoelhoMQClient(unittest.TestCase):
         self.mock_stub.DeleteChannel.assert_called_once_with(channel)
         self.assertEqual(expected_response, result_response)
 
-        #subscribe_to_channel
-
+    #subscribe_to_channel
     def test_subscribe_to_channel_new_valid_user(self):
         # Mock
         name = "test_channel"
@@ -218,6 +217,33 @@ class TestMeuQoelhoMQClient(unittest.TestCase):
         result_response = Client.subscribe_to_channel(self.mock_stub, user, name)
 
         self.mock_stub.SubscribeToChannel.assert_called_once_with(subs)
+        self.assertEqual(expected_response, result_response)
+    
+    #list_channel
+    def test_list_channels(self):
+        # Mock
+        channel1 = meu_qoelho_mq_pb2.Channels(name="Canal1", tipo=meu_qoelho_mq_pb2.Tipo.SIMPLES)
+        channel2 = meu_qoelho_mq_pb2.Channels(name="Canal2", tipo=meu_qoelho_mq_pb2.Tipo.MULTIPLO)
+
+        mock_stream = iter([channel1, channel2])
+        self.mock_stub.ListChannels = MagicMock(return_value=mock_stream)
+
+        expected_response = [
+                    "Canal1 Tipo: SIMPLES",
+                    "Canal2 Tipo: MULTIPLO"
+                ]
+        result_response = Client.list_channels(self.mock_stub)
+
+        self.assertEqual(expected_response, result_response)
+
+    def test_list_channels_empty(self):
+        # Mock
+        mock_stream = iter([])
+        self.mock_stub.ListChannels = MagicMock(return_value=mock_stream)
+
+        expected_response = []
+        result_response = Client.list_channels(self.mock_stub)
+
         self.assertEqual(expected_response, result_response)
 
 if __name__ == '__main__':

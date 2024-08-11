@@ -53,11 +53,13 @@ class Client():
             return "Erro ao deletar canal"        
 
     def list_channels(stub):
-        channel_out = meu_qoelho_mq_pb2.Channels(name = "Canal1", tipo = 1)
+        channel_out = meu_qoelho_mq_pb2.Channels(name = "Canal1")
         channels = stub.ListChannels(channel_out)
+        response = []
         for channel in channels:
             tipo = meu_qoelho_mq_pb2.Tipo.Name(channel.tipo)
-            print(channel.name +  " Tipo: " + tipo)
+            response.append(channel.name +  " Tipo: " + tipo)
+        return response
 
     def publish_message(stub, data_in, channel_in):
         msg = meu_qoelho_mq_pb2.Message(data = data_in, channel = channel_in)
