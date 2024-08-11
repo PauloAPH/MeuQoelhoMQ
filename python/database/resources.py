@@ -234,10 +234,8 @@ def list_channels():
             cur.execute(query)
             channels = cur.fetchall()
             return channels
-
     except psycopg2.DatabaseError as error:
         print(f"Error: {error}")
-
     finally:
         if conn:
             release_connection(conn)

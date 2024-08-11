@@ -78,10 +78,13 @@ class MeuQoelhoMQServicer(meu_qoelho_mq_pb2_grpc.MeuQoelhoMQServicer):
             yield response
 
     def PublishMessage(self, request, context):
-        response = "Mensagem Publicada na fila" + request.channel
         subs = RS.list_subscribers_to_channels(request.channel)
         subs = [t[0] for t in subs]
-        RS.insert_message(request.data, request.channel, subs)
+        res = RS.insert_message(request.data, request.channel, subs)
+        if res["status"] == 0:
+            response = "Mensagem Publicada na fila" + request.channel
+        else:
+            response = "Erro ao publicar no canal canal."
         return meu_qoelho_mq_pb2.Response(response = response)
     
     def SubscribeToChannel(self, request, context):

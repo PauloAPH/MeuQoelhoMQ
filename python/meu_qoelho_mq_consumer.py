@@ -21,7 +21,7 @@ def run():
         id = input("Id: ")
         password = input("Senha: ")
         cred = meu_qoelho_mq_pb2.Credentials(id = id, password = password)
-        
+
         res_create_user = Client.create_user(stub, id, password)
         print(res_create_user)
 
@@ -36,7 +36,9 @@ def run():
         sub = meu_qoelho_mq_pb2.Subscriber(credentials = cred, channel = canal)
 
         while(1):
-            Client.get_messages_from_subscrition(stub, sub)
+            messages = Client.get_messages_from_subscrition(stub, sub)
+            for message in messages:
+                print(message)
             time.sleep(10)
 
 

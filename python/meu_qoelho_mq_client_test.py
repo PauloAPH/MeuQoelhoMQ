@@ -246,5 +246,49 @@ class TestMeuQoelhoMQClient(unittest.TestCase):
 
         self.assertEqual(expected_response, result_response)
 
+
+    #list_channel
+    def test_get_messages_from_subscrition(self):
+        # Mock
+        name = "test_channel"
+        id = "Usuario"
+        password = "123456"
+        user = meu_qoelho_mq_pb2.Credentials(id = id, password = password)
+        subs = meu_qoelho_mq_pb2.Subscriber(credentials = user, channel = name)
+
+
+        message1 = meu_qoelho_mq_pb2.Response(response = "MENSAGEM 1")
+        message2 = meu_qoelho_mq_pb2.Response(response = "mensagem 2")
+
+        mock_stream = iter([message1, message2])
+        self.mock_stub.GetMessageFromChannel = MagicMock(return_value=mock_stream)
+
+        expected_response = [
+                    "MENSAGEM 1",
+                    "mensagem 2"
+                ]
+        result_response = Client.get_messages_from_subscrition(self.mock_stub, subs)
+
+        self.assertEqual(expected_response, result_response)
+
+    def test_get_messages_from_subscrition_wrong_credentials(self):
+        # Mock
+        name = "test_channel"
+        id = "Usuario"
+        password = "123456"
+        user = meu_qoelho_mq_pb2.Credentials(id = id, password = password)
+        subs = meu_qoelho_mq_pb2.Subscriber(credentials = user, channel = name)
+
+
+        message1 = meu_qoelho_mq_pb2.Response(response = "Acess denied, wrong credentials")
+
+        mock_stream = iter([message1])
+        self.mock_stub.GetMessageFromChannel = MagicMock(return_value=mock_stream)
+
+        expected_response = ["Acess denied, wrong credentials"]
+        result_response = Client.get_messages_from_subscrition(self.mock_stub, subs)
+
+        self.assertEqual(expected_response, result_response)
+        
 if __name__ == '__main__':
     unittest.main()

@@ -81,8 +81,11 @@ class Client():
 
     def get_messages_from_subscrition(stub, sub):
         res = stub.GetMessageFromChannel(sub)
+        response = []
         for r in res:
-            print(r.response)
+            response.append(r.response)
+        return response
+
 
 def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
