@@ -96,8 +96,6 @@ class MeuQoelhoMQServicer(meu_qoelho_mq_pb2_grpc.MeuQoelhoMQServicer):
                 if not subs_list:
                     insert_res = RS.insert_subscribers(request.credentials.id , request.channel)
                     update_res = RS.update_subscribers_in_messages([request.credentials.id], request.channel)
-                    print(insert_res)
-                    print(update_res)
                     if insert_res["status"] == 0 and update_res["status"] == 0:
                         response = "Inscrito na fila " + request.channel + " herdando mensagens"
                         status = 0
