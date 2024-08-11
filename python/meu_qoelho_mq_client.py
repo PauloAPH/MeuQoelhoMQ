@@ -23,50 +23,58 @@ from database import resources as RS
 from protos import meu_qoelho_mq_pb2
 from protos import meu_qoelho_mq_pb2_grpc
 
-def create_user(stub, id, password):
-    user = meu_qoelho_mq_pb2.Credentials(id = id, password = password)
-    res = stub.Register(user)
-    print(res)
+class Client():
+    def create_user(stub, id, password):
+        user = meu_qoelho_mq_pb2.Credentials(id = id, password = password)
+        res = stub.Register(user)
+        if res.status == 0:
+            return "Usuario criado com sucesso"
+        else:
+            return "Erro ao criar usuario"
 
-def create_channel_request(stub, name, tipo):
-    channel = meu_qoelho_mq_pb2.Channels()
-    channel.name = name
-    if tipo == "Simples":
-        channel.tipo = meu_qoelho_mq_pb2.Tipo.SIMPLES
-    elif tipo == "Multiplo":
-        channel.tipo = meu_qoelho_mq_pb2.Tipo.MULTIPLO
-    print(stub.CreateChannel(channel))
+    def create_channel_request(stub, name, tipo):
+        channel = meu_qoelho_mq_pb2.Channels()
+        channel.name = name
+        if tipo == "Simples":
+            channel.tipo = meu_qoelho_mq_pb2.Tipo.SIMPLES
+        elif tipo == "Multiplo":
+            channel.tipo = meu_qoelho_mq_pb2.Tipo.MULTIPLO
+        res = stub.CreateChannel(channel)
+        if res.status == 0:
+            return "Usuario criado com sucesso"
+        else:
+            return "Erro ao criar usuario"
 
-def delete_channel_request(stub):
-    channel = meu_qoelho_mq_pb2.Channels(name = "Canal1", tipo = 1)
-    stub.DeleteChannel(channel)
+    def delete_channel_request(stub):
+        channel = meu_qoelho_mq_pb2.Channels(name = "Canal1", tipo = 1)
+        stub.DeleteChannel(channel)
 
-def list_channels(stub):
-    channel_out = meu_qoelho_mq_pb2.Channels(name = "Canal1", tipo = 1)
-    channels = stub.ListChannels(channel_out)
-    for channel in channels:
-        tipo = meu_qoelho_mq_pb2.Tipo.Name(channel.tipo)
-        print(channel.name +  " Tipo: " + tipo)
+    def list_channels(stub):
+        channel_out = meu_qoelho_mq_pb2.Channels(name = "Canal1", tipo = 1)
+        channels = stub.ListChannels(channel_out)
+        for channel in channels:
+            tipo = meu_qoelho_mq_pb2.Tipo.Name(channel.tipo)
+            print(channel.name +  " Tipo: " + tipo)
 
-def publish_message(stub, data_in, channel_in):
-    msg = meu_qoelho_mq_pb2.Message(data = data_in, channel = channel_in)
-    res = stub.PublishMessage(msg)
+    def publish_message(stub, data_in, channel_in):
+        msg = meu_qoelho_mq_pb2.Message(data = data_in, channel = channel_in)
+        res = stub.PublishMessage(msg)
 
-def subscribe_to_channel(stub, cred, channel):
-    subs = meu_qoelho_mq_pb2.Subscriber(credentials = cred, channel = channel)
-    res = stub.SubscribeToChannel(subs)
-    print(res)
+    def subscribe_to_channel(stub, cred, channel):
+        subs = meu_qoelho_mq_pb2.Subscriber(credentials = cred, channel = channel)
+        res = stub.SubscribeToChannel(subs)
+        print(res)
 
-def consult_messages_in_channel(stub):
-    cred = meu_qoelho_mq_pb2.Credentials(id = "Paulo", password = "123456")
-    sub = meu_qoelho_mq_pb2.Subscriber(credentials = cred, channel = "Canal2")
-    qtd = stub.ConsultNumberOfMessages(sub)
-    print(qtd)
+    def consult_messages_in_channel(stub):
+        cred = meu_qoelho_mq_pb2.Credentials(id = "Paulo", password = "123456")
+        sub = meu_qoelho_mq_pb2.Subscriber(credentials = cred, channel = "Canal2")
+        qtd = stub.ConsultNumberOfMessages(sub)
+        print(qtd)
 
-def get_messages_from_subscrition(stub, sub):
-    res = stub.GetMessageFromChannel(sub)
-    for r in res:
-        print(r.response)
+    def get_messages_from_subscrition(stub, sub):
+        res = stub.GetMessageFromChannel(sub)
+        for r in res:
+            print(r.response)
 
 def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be

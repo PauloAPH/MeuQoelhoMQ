@@ -6,7 +6,7 @@ import grpc
 import logging
 import time
 
-import meu_qoelho_mq_client as Client
+from meu_qoelho_mq_client import Client
 
 from protos import meu_qoelho_mq_pb2
 from protos import meu_qoelho_mq_pb2_grpc
@@ -20,7 +20,8 @@ def run():
         id = input("Id: ")
         password = input("Senha: ")
         cred = meu_qoelho_mq_pb2.Credentials(id = id, password = password)
-        Client.create_user(stub, id, password)
+        res = Client.create_user(stub, id, password)
+        print(res)
         Client.subscribe_to_channel(stub, cred, "Canal3")
         sub = meu_qoelho_mq_pb2.Subscriber(credentials = cred, channel = "Canal3")
 

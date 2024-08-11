@@ -55,9 +55,12 @@ class MeuQoelhoMQServicer(meu_qoelho_mq_pb2_grpc.MeuQoelhoMQServicer):
 
     def CreateChannel(self, request, context):
         tipo = meu_qoelho_mq_pb2.Tipo.Name(request.tipo)
-        RS.insert_channel(request.name, tipo)
-        response = "Request recebida " + request.name + " do tipo " + tipo
-        return meu_qoelho_mq_pb2.Response(response = response)
+        res = RS.insert_channel(request.name, tipo)
+        if res["status"] == 0:
+            response = "Request recebida " + request.name + " do tipo " + tipo
+        else:
+            response = "Erro ao criar canal."
+        return meu_qoelho_mq_pb2.Response(response = response, status = res["status"])
     
     def DeleteChannel(self, request, context):
         RS.delete_channel(request.name)
