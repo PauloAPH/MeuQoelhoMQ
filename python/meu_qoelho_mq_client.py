@@ -19,7 +19,6 @@ from datetime import datetime, timezone
 import grpc
 import logging
 
-from database import resources as RS 
 from protos import meu_qoelho_mq_pb2
 from protos import meu_qoelho_mq_pb2_grpc
 

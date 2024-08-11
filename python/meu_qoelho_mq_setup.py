@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 import logging
 import grpc
 
-import meu_qoelho_mq_client as Client
+from meu_qoelho_mq_client import Client
 
 from database import create_tables
 from database import create_database

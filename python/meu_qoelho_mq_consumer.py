@@ -20,10 +20,13 @@ def run():
         id = input("Id: ")
         password = input("Senha: ")
         cred = meu_qoelho_mq_pb2.Credentials(id = id, password = password)
-        res = Client.create_user(stub, id, password)
-        print(res)
-        Client.subscribe_to_channel(stub, cred, "Canal3")
-        sub = meu_qoelho_mq_pb2.Subscriber(credentials = cred, channel = "Canal3")
+        res_create_user = Client.create_user(stub, id, password)
+        print(res_create_user)
+        Client.list_channels(stub)
+        canal = input("Escolha o canal: ")
+        res_sub = Client.subscribe_to_channel(stub, cred, canal)
+        print(res_sub)
+        sub = meu_qoelho_mq_pb2.Subscriber(credentials = cred, channel = canal)
 
         while(1):
             Client.get_messages_from_subscrition(stub, sub)

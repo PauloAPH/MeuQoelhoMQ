@@ -5,7 +5,7 @@ import grpc
 import logging
 import time
 
-import meu_qoelho_mq_client as Client
+from meu_qoelho_mq_client import Client
 
 from protos import meu_qoelho_mq_pb2
 from protos import meu_qoelho_mq_pb2_grpc
