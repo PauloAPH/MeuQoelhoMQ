@@ -65,7 +65,7 @@ class MeuQoelhoMQServicer(meu_qoelho_mq_pb2_grpc.MeuQoelhoMQServicer):
     def DeleteChannel(self, request, context):
         res = RS.delete_channel(request.name)
         if res["status"] == 0:
-            response = response = "Fila " + request.name + "deletada"
+            response = request.name + " deletado"
         else:
             response = "Erro ao deletar canal."
         return meu_qoelho_mq_pb2.Response(response = response, status = res["status"])

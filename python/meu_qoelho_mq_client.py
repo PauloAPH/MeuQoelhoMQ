@@ -45,8 +45,8 @@ class Client():
         else:
             return "Erro ao criar usuario"
 
-    def delete_channel_request(stub):
-        channel = meu_qoelho_mq_pb2.Channels(name = "Canal1", tipo = 1)
+    def delete_channel_request(stub, name):
+        channel = meu_qoelho_mq_pb2.Channels(name = name)
         res = stub.DeleteChannel(channel)
         if res.status == 0:
             return "Canal deletado com sucesso"
